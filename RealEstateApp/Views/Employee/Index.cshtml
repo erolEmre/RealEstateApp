@@ -1,0 +1,14 @@
+﻿@using System.Security.Claims
+
+@{
+    var auth0UserId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <a href="/Account/Login">Login</a>
+}
+else
+{
+    <a href="/Account/Logout">Logout</a>
+}

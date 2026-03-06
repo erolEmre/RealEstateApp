@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="RealEstate.Application/RealEstate.Application.csproj" />
+  <Project Path="RealEstate.Core/RealEstate.Core.csproj" />
+  <Project Path="RealEstate.Infrastructure/RealEstate.Infrastructure.csproj" />
+  <Project Path="RealEstateApp/RealEstateApp.WebUI.csproj" />
+</Solution>

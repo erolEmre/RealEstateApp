@@ -1,0 +1,143 @@
+﻿@model IEnumerable<RealEstate.Core.Models.House>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfRooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfBathrooms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Area)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ListingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfRooms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfBathrooms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Area)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ListingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAvailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContactNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table> *@
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.NumberOfBathrooms)</th>
+            <th class="text-center">@Html.DisplayNameFor(model => model.Area)</th>
+            <th class="text-end">@Html.DisplayNameFor(model => model.Price)</th>
+            <th class="text-center">@Html.DisplayNameFor(model => model.IsAvailable)</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="fw-bold">
+                    @item.Title
+                    <br />
+                    <small class="text-muted fw-normal">@item.ContactNumber</small>
+                </td>
+                <td>
+                    <span class="badge bg-info text-dark">
+                        @Html.DisplayFor(modelItem => item.NumberOfRooms) Oda / @item.NumberOfBathrooms Banyo
+                    </span>
+                </td>
+                <td class="text-center">@item.Area m²</td>
+                <td class="text-end fw-bold">
+                    @item.Price.ToString("N0") ₺
+                </td>
+                <td class="text-center">
+                    @if (item.IsAvailable)
+                    {
+                        <span class="badge rounded-pill bg-success">
+                            <i class="bi bi-check-circle me-1"></i> Aktif
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-danger">
+                            <i class="bi bi-x-circle me-1"></i> Pasif
+                        </span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Düzenle</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Sil</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
