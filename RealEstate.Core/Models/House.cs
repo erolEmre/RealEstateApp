@@ -47,10 +47,15 @@ namespace RealEstate.Core.Models
             NumberOfBathrooms = numberOfBathrooms;
         }
         public int Id { get; private set; }
-        public string Title { get; private set; } 
+        [Display(Name = "Başlık")]
+        public string Title { get; private set; }
+        [Display(Name = "Açıklama")]
         public string? Description { get; private set; } = "";
+        [Display(Name = "Oda sayısı")]
         public Enum_NumberOfRooms NumberOfRooms { get; private set; }
+        [Display(Name = "Banyo sayısı")]
         public int NumberOfBathrooms { get; private set; } = 1;
+        [Display(Name = "Metrekare")]
         public double Area { get; private set; }
 
         public void ChangeArea(double area)
@@ -61,6 +66,7 @@ namespace RealEstate.Core.Models
             Area = area;
         }
         [DisplayFormat(DataFormatString = "{0:G29}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Fiyat")]
         public decimal Price { get; private set; }
         public void ChangePrice(decimal price)
         {
@@ -68,7 +74,9 @@ namespace RealEstate.Core.Models
                 throw new Exception("Price must be positive.");
             Price = price;
         }
+        [Display(Name = "İlan Tarihi")]
         public DateTime ListingDate { get; private set; }
+        [Display(Name = "Uygunluk")]
         public bool IsAvailable { get; private set; }
 
         public void MarkAsUnavailable()
@@ -101,8 +109,9 @@ namespace RealEstate.Core.Models
                 throw new Exception("Adres boşken ilan yayınlanamaz");
             MarkAsAvailable();
         }
+        [Display(Name = "Telefon Numarası")]
         public string? ContactNumber { get; private set; } = default!;
-
+        [Display(Name = "Adres")]
         public Address? Address { get; private set; } = default!;
 
         public int EmployeeId { get; private set; }

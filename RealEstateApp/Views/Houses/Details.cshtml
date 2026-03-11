@@ -1,13 +1,14 @@
-﻿@model RealEstate.Core.Models.House
+﻿@using System.Security.Claims
+@model RealEstate.Core.Models.House
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detaylar";
 }
 
-<h1>Details</h1>
+<h1>Detaylar</h1>
 
 <div>
-    <h4>House</h4>
+    <h4>Ev Detayları...</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -68,11 +69,17 @@
             @Html.DisplayNameFor(model => model.Employee)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.Id)
+            @Html.DisplayFor(model => model.Employee.FirstName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @{
+		var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if(Model.Employee != null && employeeId== Model.Employee.Auth0Sub)
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Düzenle</a> 
+		}
+    }
+    <a asp-action="Index">Listeye dön</a>
 </div>

@@ -1,13 +1,14 @@
-﻿@model IEnumerable<RealEstate.Core.Models.House>
+﻿@using System.Security.Claims
+@model IEnumerable<RealEstate.Core.Models.House>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Giriş";
 }
 
-<h1>Index</h1>
+<h1>Giriş</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Yeni ilan oluştur..</a>
 </p>
 @* <table class="table">
     <thead>
@@ -91,6 +92,7 @@
     <thead class="table-dark">
         <tr>
             <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.NumberOfRooms)</th>
             <th>@Html.DisplayNameFor(model => model.NumberOfBathrooms)</th>
             <th class="text-center">@Html.DisplayNameFor(model => model.Area)</th>
             <th class="text-end">@Html.DisplayNameFor(model => model.Price)</th>
@@ -108,9 +110,15 @@
                     <small class="text-muted fw-normal">@item.ContactNumber</small>
                 </td>
                 <td>
-                    <span class="badge bg-info text-dark">
-                        @Html.DisplayFor(modelItem => item.NumberOfRooms) Oda / @item.NumberOfBathrooms Banyo
+                    <span class="badge bg-primary text-dark">
+                        @Html.DisplayFor(modelItem => item.NumberOfRooms) Oda
+                        
                     </span>
+                </td>
+                <td>
+                    <span class="badge bg-info text-dark">
+                        @Html.DisplayFor(modelItem => item.NumberOfBathrooms) Banyo
+					</span>
                 </td>
                 <td class="text-center">@item.Area m²</td>
                 <td class="text-end fw-bold">
@@ -131,11 +139,28 @@
                     }
                 </td>
                 <td>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Düzenle</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Sil</a>
-                    </div>
+                    @{
+                        var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                        if (item.Employee != null && item.Employee.Auth0Sub == employeeId)
+                        {
+
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Düzenle</a>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a>
+                                </div>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Sil</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="btn-group btn-group-sm" role="group"> 
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a> 
+                            </div>
+                        }
+
+                    }
                 </td>
             </tr>
         }

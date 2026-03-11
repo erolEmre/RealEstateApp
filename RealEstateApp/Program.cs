@@ -7,10 +7,15 @@ using RealEstate.Core.Models;
 using RealEstate.Infrastructure.Context;
 using RealEstate.Infrastructure.Repository;
 using System.Security.Claims;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
+
+
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllersWithViews();
 
@@ -18,6 +23,11 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
 {
     options.Domain = builder.Configuration["Auth0:Domain"];
     options.ClientId = builder.Configuration["Auth0:ClientId"];
+    if (string.IsNullOrEmpty(options.Domain) || string.IsNullOrEmpty(options.ClientId))
+{
+    // Değerler gelmiyorsa uygulama burada dursun ve hata mesajını versin
+    throw new Exception("HATA: Auth0 konfigürasyon değerleri okunamadı! .env dosyasını veya Docker environment değişkenlerini kontrol edin.");
+}
     options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
     options.OpenIdConnectEvents = new OpenIdConnectEvents
     {
@@ -25,7 +35,8 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
         {
             var sub = context.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var email = context.Principal.FindFirst("name")?.Value; // Burayı değiştirmeyi unutma name,
-                                                                    // mail olarak döndüğü için şimdilik bunu verdim.
+                                                                    // mail olarak döndüğü için şimdilik bunu verdim ki
+                                                                    // sistem çalışabilsin.
 
             var db = context.HttpContext.RequestServices
                 .GetRequiredService<RealEstateContext>();
@@ -62,6 +73,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -79,7 +91,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var context = services.GetRequiredService<RealEstateContext>(); // Kendi Context ismini yaz
+        var context = services.GetRequiredService<RealEstateContext>();
         context.Database.Migrate(); // Bu satır eksik tabloları SQL'e basar
         Console.WriteLine("Veritabanı başarıyla güncellendi!");
     }
