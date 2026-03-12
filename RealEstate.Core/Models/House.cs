@@ -15,13 +15,13 @@ namespace RealEstate.Core.Models
         {
             
         }
-        public House(decimal price, string title,double area, int employeeId)
+        public House(decimal price, string title,double area, int employeeId,Address address)
         {
             if (employeeId == 0)
                 throw new Exception("EmployeeId required");
 
             Title = title;
-            //Address = address;
+            Address = address;
             ListingDate = DateTime.UtcNow;
             EmployeeId = employeeId;
             ChangeArea(area);

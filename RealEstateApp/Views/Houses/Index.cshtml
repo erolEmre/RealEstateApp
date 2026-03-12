@@ -99,8 +99,11 @@
 			<th>@Html.DisplayNameFor(model => model.NumberOfRooms)</th>
 			<th>@Html.DisplayNameFor(model => model.NumberOfBathrooms)</th>
 			<th class="text-center">@Html.DisplayNameFor(model => model.Area)</th>
-			<th class="text-end">@Html.DisplayNameFor(model => model.Price)</th>
+			<th class="text-center">@Html.DisplayNameFor(model => model.Price)</th>
 			<th class="text-center">@Html.DisplayNameFor(model => model.IsAvailable)</th>
+            <th class="text-center">@Html.DisplayNameFor(model => model.Address.City)</th>
+            <th class="text-center">@Html.DisplayNameFor(model => model.Address.District)</th>
+            
 			@{				
 					<th>İşlemler</th>
 			}
@@ -144,6 +147,14 @@
 						</span>
 					}
 				</td>
+                <td class="text-center">
+                        @* @item.Address?.City *@
+                        @Html.DisplayFor(modelItem => item.Address.City)
+                </td>
+                <td class="text-center">
+                    @* @item.Address?.District *@
+                    @Html.DisplayFor(modelItem => item.Address.District)
+                </td>
 				<td>
 					@{
 						var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -168,6 +179,7 @@
 
 					}
 				</td>
+                
 			</tr>
 		}
 	</tbody>

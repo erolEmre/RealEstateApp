@@ -21,9 +21,9 @@ namespace RealEstate.Core.Models
         private readonly List<House> _createdHouses = new();
         public IReadOnlyCollection<House> CreatedHouses => _createdHouses;
 
-        public House CreateHouse(decimal price,double area, string title)
+        public House CreateHouse(decimal price,double area, string title,Address adress)
         {
-            var house = new House(price, title,area, Id);
+            var house = new House(price, title,area, Id,adress);
             _createdHouses.Add(house);
             return house;
         }

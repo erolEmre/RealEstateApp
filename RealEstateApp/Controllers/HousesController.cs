@@ -29,7 +29,8 @@ namespace RealEstateApp.WebUI.Controllers
         {
             var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var realEstateContext = _context.Houses.Include(h => h.Employee);
+            var realEstateContext = _context.Houses.Include(h => h.Employee)
+                .Include(x => x.Address);
                 //.Where(e => e.Employee.Auth0Sub == employeeId);
             return View(await realEstateContext.ToListAsync());
         }
@@ -79,16 +80,29 @@ namespace RealEstateApp.WebUI.Controllers
             {
                 throw new Exception("");
             }
-            House house = new House(
 
+            var address = new Address
+            {
+                City = houseVM.City,
+                District = houseVM.District,
+                Street = houseVM.Street,
+                BuildingNo = houseVM.BuildingNo,
+                ApartmentNo = houseVM.ApartmentNo
+            };
+
+            House house = new House(
                 houseVM.Price,
                 houseVM.Title,
                 houseVM.Area,
-                employee.Id                
+                employee.Id,
+                address
             );
             house.UpdateRooms(houseVM.NumberOfRooms, houseVM.NumberOfBathrooms, employee.Id);
             house.SetDescription(houseVM.Description);
             house.SetContactNumber(houseVM.ContactNumber);
+
+            
+
             if (ModelState.IsValid)
             {
                 _context.Add(house);

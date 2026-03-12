@@ -29,6 +29,11 @@ namespace RealEstateApp.WebUI.Models
         public bool IsAvailable { get; set; }
         //public Address Address { get; set; } = default!;
 
-        
+        public string City { get; init; } = default!;
+        public string District { get; init; } = default!;
+        public string? Street { get; init; }
+        public string? BuildingNo { get; init; }
+        public string? ApartmentNo { get; init; }
+
     }
 }
