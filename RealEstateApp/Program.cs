@@ -1,4 +1,6 @@
 using Auth0.AspNetCore.Authentication;
+using DotNetEnv;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -6,8 +8,8 @@ using RealEstate.Core.Interfaces;
 using RealEstate.Core.Models;
 using RealEstate.Infrastructure.Context;
 using RealEstate.Infrastructure.Repository;
+using RealEstateApp.WebUI;
 using System.Security.Claims;
-using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
     throw new Exception("HATA: Auth0 konfigürasyon değerleri okunamadı! .env dosyasını veya Docker environment değişkenlerini kontrol edin.");
 }
     options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+
     options.OpenIdConnectEvents = new OpenIdConnectEvents
     {
         OnTokenValidated = async context =>
@@ -57,6 +60,7 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
     
 });
 
+builder.Services.AddScoped<IClaimsTransformation, ClaimsTransformer>();
 
 builder.Services.AddDbContext<RealEstateContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -83,7 +87,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Houses}/{action=Index}/{id?}");
 
 // Veritabanını otomatik oluşturma ve tabloları basma kısmı
 using (var scope = app.Services.CreateScope())

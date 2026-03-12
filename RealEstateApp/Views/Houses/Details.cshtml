@@ -5,9 +5,124 @@
     ViewData["Title"] = "Detaylar";
 }
 
-<h1>Detaylar</h1>
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark text-light shadow border-secondary rounded-4">
 
-<div>
+                <div class="card-header bg-dark border-bottom border-secondary px-4 py-3 text-center">
+                    <h4 class="mb-0 text-info fw-bold">
+                        Ev Detayları
+                    </h4>
+                </div>
+
+                <div class="card-body p-4 p-sm-5">
+                    <dl class="row gy-3 mb-0">
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Title)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Title)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+                        <dd class="col-7 text-light">
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.NumberOfRooms)
+                        </dt>
+                        <dd class="col-7 fw-medium">
+                            @Html.DisplayFor(model => model.NumberOfRooms)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.NumberOfBathrooms)
+                        </dt>
+                        <dd class="col-7 fw-medium">
+                            @Html.DisplayFor(model => model.NumberOfBathrooms)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Area)
+                        </dt>
+                        <dd class="col-7 fw-medium">
+                            @Html.DisplayFor(model => model.Area) m²
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Price)
+                        </dt>
+                        <dd class="col-7 fw-bold text-success">
+                            @Html.DisplayFor(model => model.Price)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.ListingDate)
+                        </dt>
+                        <dd class="col-7">
+                            @Html.DisplayFor(model => model.ListingDate)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal align-self-center">
+                            @Html.DisplayNameFor(model => model.IsAvailable)
+                        </dt>
+                        <dd class="col-7 mb-0">
+                            @if (Model.IsAvailable)
+                            {
+                                <span class="badge bg-success px-2 py-1 rounded-pill">Müsait</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger px-2 py-1 rounded-pill">Satıldı/Kiralandı</span>
+                            }
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.ContactNumber)
+                        </dt>
+                        <dd class="col-7 fw-medium">
+                            @Html.DisplayFor(model => model.ContactNumber)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Employee)
+                        </dt>
+                        <dd class="col-7">
+                            <span class="text-info fw-medium">@Html.DisplayFor(model => model.Employee.FirstName)</span>
+                        </dd>
+
+                    </dl>
+                </div>
+
+                <div class="card-footer bg-dark border-top border-secondary px-4 py-3 rounded-bottom-4 d-flex justify-content-center gap-3">
+                    <a asp-action="Index" class="btn btn-outline-light px-4">Listeye Dön</a>
+
+                    @{
+                        var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        if (User.Identity.IsAuthenticated && User.IsInRole("Agent"))
+                        {
+                            if (Model.Employee != null && employeeId == Model.Employee.Auth0Sub)
+                            {
+                                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary px-4 shadow-sm">
+                                    Düzenle
+                                </a>
+                            }
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@*
+
+Bu sayfayı benim için güzelleştir. "<div>
     <h4>Ev Detayları...</h4>
     <hr />
     <dl class="row">
@@ -75,11 +190,18 @@
 </div>
 <div>
     @{
-		var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if(Model.Employee != null && employeeId== Model.Employee.Auth0Sub)
+        var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (User.Identity.IsAuthenticated && User.IsInRole("Agent"))
         {
-            <a asp-action="Edit" asp-route-id="@Model?.Id">Düzenle</a> 
-		}
+            if (Model.Employee != null && employeeId == Model.Employee.Auth0Sub)
+            {
+                <a asp-action="Edit" asp-route-id="@Model?.Id">Düzenle</a> 
+            }
+        }
     }
     <a asp-action="Index">Listeye dön</a>
 </div>
+"
+
+*@
+            

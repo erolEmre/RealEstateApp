@@ -13,7 +13,7 @@ using RealEstateApp.WebUI.Models;
 
 namespace RealEstateApp.WebUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Agent")]
     public class HousesController : Controller
     {
         private readonly RealEstateContext _context;
@@ -24,6 +24,7 @@ namespace RealEstateApp.WebUI.Controllers
         }
 
         // GET: Houses
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -34,6 +35,7 @@ namespace RealEstateApp.WebUI.Controllers
         }
 
         // GET: Houses/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,6 +55,7 @@ namespace RealEstateApp.WebUI.Controllers
         }
 
         // GET: Houses/Create
+        [Authorize(Roles = "Agent")]
         public IActionResult Create()
         {
             //ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id");
@@ -61,7 +64,7 @@ namespace RealEstateApp.WebUI.Controllers
 
         // POST: Houses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HouseVM houseVM)

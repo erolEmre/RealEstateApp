@@ -16,6 +16,6 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
-EXPOSE 7201
+EXPOSE 8081
 
 ENTRYPOINT ["dotnet", "RealEstateApp.WebUI.dll"]
