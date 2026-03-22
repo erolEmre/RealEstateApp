@@ -6,16 +6,7 @@
     Layout = null;
 }
 
-<h1>Giriş</h1>
-@{
-	if (User.Identity.IsAuthenticated)
-	{
-		<p>
-			<a asp-action="Create">Yeni ilan oluştur..</a>
-		</p>
-	}
-   
-}
+
 <!DOCTYPE html>
 
 <html class="dark" lang="tr"><head>
@@ -142,25 +133,28 @@
                 </h2>
 <div class="space-y-8">
 <!-- Property Status -->
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">İlan Durumu</span>
-<div class="flex gap-2">
-<button class="flex-1 py-2 rounded-lg bg-primary text-on-primary font-medium text-sm">Satılık</button>
-<button class="flex-1 py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-colors">Kiralık</button>
-</div>
-</div>
+<form asp-controller="Houses" asp-action="Index" method="get">
 <!-- Price Range -->
 <div>
 <span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
 <div class="grid grid-cols-2 gap-2">
-<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Min" type="number"/>
-<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Max" type="number"/>
+<input asp-for="minPrice" 
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
+placeholder="Min" 
+type="number"/>
+<input asp-for="maxPrice" 
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
+placeholder="Max" 
+type="number"/>
 </div>
 </div>
 <!-- City Select -->
 <div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Şehir / İlçe</span>
-<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Şehir</span>
+<select asp-for="City"
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
+<option></option>
+<option>Tokat</option>
 <option>İstanbul</option>
 <option>Ankara</option>
 <option>İzmir</option>
@@ -180,7 +174,7 @@
 </div>
 <div>
 <span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Banyo</span>
-<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+<select asp-for="NumberOfBathrooms" class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
 <option>1</option>
 <option>2</option>
 <option>3+</option>
@@ -191,17 +185,26 @@
 <div>
 <span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Metrekare (m²)</span>
 <div class="flex items-center gap-2">
-<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Min" type="number"/>
+<input asp-for = "minArea"
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
+placeholder="Min" 
+type="number"/>
 <span class="text-outline">-</span>
-<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Max" type="number"/>
+<input asp-for="maxArea"
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
+placeholder="Max" 
+type="number"/>
 </div>
 </div>
-<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+<button type= "submit"
+    class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
                         Sonuçları Uygula
                     </button>
+                    </form>
 </div>
 </div>
 </aside>
+
 <!-- Listings Grid -->
 <section class="flex-1">
 <div class="flex justify-between items-end mb-8">
@@ -555,3 +558,13 @@
 </div>
 
 *@
+<h1>Giriş</h1>
+@{
+	if (User.Identity.IsAuthenticated)
+	{
+		<p>
+			<a asp-action="Create">Yeni ilan oluştur..</a>
+		</p>
+	}
+   
+}

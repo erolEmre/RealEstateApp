@@ -13,7 +13,7 @@ using RealEstateApp.WebUI.Models;
 
 namespace RealEstateApp.WebUI.Controllers
 {
-    [Authorize(Roles = "Agent")]
+    // [Authorize(Roles = "Agent")]
     public class HousesController : Controller
     {
         private readonly RealEstateContext _context;
@@ -24,22 +24,21 @@ namespace RealEstateApp.WebUI.Controllers
         }
 
         // GET: Houses
-        [AllowAnonymous]
-        public async Task<IActionResult> Index()
-        {
-            var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //public async Task<IActionResult> Index()
+        //{
+        //    var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var realEstateContext = _context.Houses
-                .Include(h => h.Employee)
-                .Include(x => x.Address)
-                .ToList();
-            //Yeni tipe map ettik
-            HouseVMSort houseVMSort = new HouseVMSort
-            {
-                Houses = realEstateContext
-            };
-            return View(houseVMSort);
-        }
+        //    var realEstateContext = _context.Houses
+        //        .Include(h => h.Employee)
+        //        .Include(x => x.Address)
+        //        .ToList();
+        //    //Yeni tipe map ettik
+        //    HouseVMSort houseVMSort = new HouseVMSort
+        //    {
+        //        Houses = realEstateContext
+        //    };
+        //    return View(houseVMSort);
+        //}
 
         // GET: Houses/Details/5
         [AllowAnonymous]
@@ -211,18 +210,60 @@ namespace RealEstateApp.WebUI.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        public async Task<List<House>> sortOrder(string sortOrder)
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Index(HouseVMSort searchModel)
         {
-            var listing = _context.Houses.ToList();
+            // 1. SORGUYU BAŞLAT (Henüz veritabanına gitmiyor, sadece SQL cümlesi hazırlıyoruz)
+             var query = _context.Houses
+                .Include(x=>x.Address)
+                .Include(x=>x.Employee)
+                .AsQueryable();
 
-            listing = sortOrder switch
+            // 2. FİLTRELEME (WHERE) ADIMLARI
+            // Eğer kullanıcı minPrice kutusuna bir şey yazmışsa:
+                        
+            // Price
+            if (searchModel.minPrice.HasValue)
             {
-                "date_asc" => listing.OrderBy(x => x.ListingDate).ToList(),
-                "date_desc" => listing.OrderByDescending(x => x.ListingDate).ToList(),
-                //"price" => listing.Where(x => x.Price >)
-            };
-            return listing;
+                query = query.Where(x => x.Price >= searchModel.minPrice.Value);
+            }
+
+            if(searchModel.maxPrice.HasValue)
+            {
+                query = query.Where(x => x.Price <= searchModel.maxPrice.Value);
+            }
+            // Area
+            if (searchModel.minArea.HasValue)
+            {
+                query = query.Where(x => x.Area >= searchModel.minArea.Value);
+            }
+            if (searchModel.maxArea.HasValue)
+            {
+                query = query.Where(x => x.Area >= searchModel.maxArea.Value);
+            }
+            if(!String.IsNullOrEmpty(searchModel.City))
+            {
+                query = query.Where(x => x.Address.City == searchModel.City);
+            }
+
+            // 3. SIRALAMA (ORDER BY) ADIMI
+            // Senin yazdığın harika switch yapısını burada kullanıyoruz
+            //query = house.SortOrder switch
+            //{
+            //    "date_asc" => query.OrderBy(x => x.ListingDate),
+            //    "date_desc" => query.OrderByDescending(x => x.ListingDate),
+            //    "price_asc" => query.OrderBy(x => x.Price),
+            //    // GÖREV 3: Fiyata göre azalan (price_desc) durumunu sen yaz
+            //    _ => query.OrderByDescending(x => x.ListingDate) // Varsayılan sıralama (En yeniler)
+            //};
+
+            // 4. VERİYİ ÇEK VE MODELİ HAZIRLA
+            // İşte şimdi ToListAsync() diyerek SQL'i çalıştırıyoruz!
+            searchModel.Houses = await query.ToListAsync();
+
+            // 5. SONUCU EKRANA GÖNDER
+            return View(searchModel);
         }
         private bool HouseExists(int id)
         {
