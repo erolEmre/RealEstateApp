@@ -9,6 +9,7 @@ namespace RealEstateApp.WebUI.Models
         public HouseVM() { }
 
         public int Id { get; set; }
+        public string ImageUrl { get; set; }
 
         [Display(Name = "Başlık")]
         public string Title { get; set; }

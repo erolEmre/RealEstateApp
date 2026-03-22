@@ -29,10 +29,16 @@ namespace RealEstateApp.WebUI.Controllers
         {
             var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var realEstateContext = _context.Houses.Include(h => h.Employee)
-                .Include(x => x.Address);
-                //.Where(e => e.Employee.Auth0Sub == employeeId);
-            return View(await realEstateContext.ToListAsync());
+            var realEstateContext = _context.Houses
+                .Include(h => h.Employee)
+                .Include(x => x.Address)
+                .ToList();
+            //Yeni tipe map ettik
+            HouseVMSort houseVMSort = new HouseVMSort
+            {
+                Houses = realEstateContext
+            };
+            return View(houseVMSort);
         }
 
         // GET: Houses/Details/5
@@ -100,8 +106,9 @@ namespace RealEstateApp.WebUI.Controllers
             house.UpdateRooms(houseVM.NumberOfRooms, houseVM.NumberOfBathrooms, employee.Id);
             house.SetDescription(houseVM.Description);
             house.SetContactNumber(houseVM.ContactNumber);
+            house.SetImageUrl(houseVM.ImageUrl);
 
-            
+
 
             if (ModelState.IsValid)
             {
@@ -205,6 +212,18 @@ namespace RealEstateApp.WebUI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<List<House>> sortOrder(string sortOrder)
+        {
+            var listing = _context.Houses.ToList();
+
+            listing = sortOrder switch
+            {
+                "date_asc" => listing.OrderBy(x => x.ListingDate).ToList(),
+                "date_desc" => listing.OrderByDescending(x => x.ListingDate).ToList(),
+                //"price" => listing.Where(x => x.Price >)
+            };
+            return listing;
+        }
         private bool HouseExists(int id)
         {
             return _context.Houses.Any(e => e.Id == id);

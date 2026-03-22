@@ -1,8 +1,9 @@
 ﻿@using System.Security.Claims
-@model IEnumerable<RealEstate.Core.Models.House>
+@model RealEstateApp.WebUI.Models.HouseVMSort
 
 @{
 	ViewData["Title"] = "Giriş";
+    Layout = null;
 }
 
 <h1>Giriş</h1>
@@ -13,8 +14,292 @@
 			<a asp-action="Create">Yeni ilan oluştur..</a>
 		</p>
 	}
+   
 }
-@* <table class="table">
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#002d5a",
+              "surface-variant": "#424751",
+              "on-tertiary-container": "#ffa884",
+              "on-error": "#ffffff",
+              "primary": "#abc7ff",
+              "on-error-container": "#ffdad6",
+              "inverse-primary": "#00346f",
+              "tertiary-fixed": "#ffdbce",
+              "on-primary-fixed": "#001b3f",
+              "on-surface": "#e1e2e5",
+              "secondary-container": "#fd702d",
+              "surface-container-highest": "#333539",
+              "tertiary-fixed-dim": "#ffb598",
+              "on-tertiary": "#ffffff",
+              "on-surface-variant": "#c2c6d3",
+              "surface-dim": "#111416",
+              "surface-container-high": "#282a2d",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#191c1e",
+              "on-primary-fixed-variant": "#00458f",
+              "surface-bright": "#373a3e",
+              "primary-fixed-dim": "#abc7ff",
+              "surface-tint": "#abc7ff",
+              "secondary-fixed": "#ffdbce",
+              "on-primary": "#002f65",
+              "secondary": "#ffb598",
+              "error-container": "#93000a",
+              "surface": "#111416",
+              "tertiary": "#ffb598",
+              "background": "#0b0e11",
+              "surface-container": "#1d2023",
+              "surface-container-low": "#191c1e",
+              "tertiary-container": "#873000",
+              "on-secondary-fixed-variant": "#7e2c00",
+              "on-tertiary-fixed": "#370f00",
+              "on-tertiary-fixed-variant": "#7e2c00",
+              "on-primary-container": "#d7e2ff",
+              "error": "#ffb4ab",
+              "secondary-fixed-dim": "#ffb598",
+              "on-background": "#e1e2e5",
+              "outline": "#8c919d",
+              "primary-fixed": "#d7e2ff",
+              "outline-variant": "#424751",
+              "on-secondary-fixed": "#370f00",
+              "surface-container-lowest": "#0c0f12",
+              "inverse-surface": "#e1e2e5",
+              "on-secondary-container": "#ffdbce"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #0b0e11; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        .dark nav { background-color: rgba(11, 14, 17, 0.8) !important; }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container dark">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 backdrop-blur-xl shadow-[0px_12px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
+<div class="flex justify-between items-center px-8 py-4 max-w-[1920px] mx-auto">
+<div class="text-2xl font-extrabold text-primary tracking-tighter">The Curated Estate</div>
+<div class="hidden md:flex items-center gap-8 font-['Manrope'] font-medium tracking-tight">
+
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">account_circle</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">Sign In</button>
+</div>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="px-8 pb-12 pt-8">
+<div class="relative h-[400px] rounded-[2rem] overflow-hidden flex items-center justify-center text-center">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container to-background opacity-90"></div>
+<img alt="" class="absolute inset-0 w-full h-full object-cover -z-10" data-alt="Luxury modern estate pool and exterior view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgqXuK3qp2AhLFbkGnNF9_r8Usnchui5bY6vtwkzbrBs5Wmn8YRX2qI5tvnqT5WQLuEciX7ezZiWmdmWifRSYFjALU3BwJ7dqQYRyJbo6xNBNI_q4PPb-UV-FK8tJsrZsIBbttY-cjPAobcqWnOrqBTGlk7IPAx4osU433HEOfkiijeNDr0jFVj8L2DybDrMMEdHIrmXBsjGABoFyrg-NPLkHHmcUI8_fm_0V56jyTg6NlLodO8KgVWg_7_nv0G1fUTEkAXdkD0Ws"/>
+<div class="relative z-10 max-w-3xl px-6">
+<h1 class="text-5xl md:text-6xl font-extrabold text-white mb-8 tracking-tighter">Hayalindeki Evi Bul</h1>
+<div class="bg-surface-container-lowest p-2 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2">
+<div class="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full py-4 text-on-surface placeholder:text-outline" placeholder="Şehir, semt veya ilan başlığı ara..." type="text"/>
+</div>
+<button class="bg-secondary-container text-white px-10 py-4 rounded-xl font-bold active:scale-95 transition-transform">İlanları Keşfet</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Area -->
+<div class="max-w-[1920px] mx-auto px-8 flex flex-col lg:flex-row gap-8 pb-24">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-80 shrink-0">
+<div class="bg-surface-container rounded-3xl p-8 sticky top-28">
+<h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">tune</span>
+                    Filtrele
+                </h2>
+<div class="space-y-8">
+<!-- Property Status -->
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">İlan Durumu</span>
+<div class="flex gap-2">
+<button class="flex-1 py-2 rounded-lg bg-primary text-on-primary font-medium text-sm">Satılık</button>
+<button class="flex-1 py-2 rounded-lg bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-colors">Kiralık</button>
+</div>
+</div>
+<!-- Price Range -->
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
+<div class="grid grid-cols-2 gap-2">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Min" type="number"/>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Max" type="number"/>
+</div>
+</div>
+<!-- City Select -->
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Şehir / İlçe</span>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
+<option>İstanbul</option>
+<option>Ankara</option>
+<option>İzmir</option>
+<option>Muğla</option>
+</select>
+</div>
+<!-- Rooms & Bathrooms -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Oda</span>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+<option>1+1</option>
+<option>2+1</option>
+<option>3+1</option>
+<option>4+1+</option>
+</select>
+</div>
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Banyo</span>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+<option>1</option>
+<option>2</option>
+<option>3+</option>
+</select>
+</div>
+</div>
+<!-- Size -->
+<div>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Metrekare (m²)</span>
+<div class="flex items-center gap-2">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Min" type="number"/>
+<span class="text-outline">-</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" placeholder="Max" type="number"/>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+                        Sonuçları Uygula
+                    </button>
+</div>
+</div>
+</aside>
+<!-- Listings Grid -->
+<section class="flex-1">
+<div class="flex justify-between items-end mb-8">
+<div>
+<p class="text-on-surface-variant text-sm font-medium mb-1">Toplam 248 emlak bulundu</p>
+<h2 class="text-3xl font-extrabold text-primary tracking-tight">Öne Çıkan Portföyler</h2>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
+<select class="bg-transparent border-none font-bold text-primary focus:ring-0 cursor-pointer">
+<option>En Yeni İlanlar</option>
+<option>Fiyat (Artan)</option>
+<option>Fiyat (Azalan)</option>
+</select>
+</div>
+</div>
+    
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    @foreach (var item in Model.Houses)
+    {
+         <div class="group bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500">
+            <div class="relative aspect-[4/3] overflow-hidden">
+                <img alt="@item.Description" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="@("https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" ?? item.ImageUrl)"/>
+                
+                @if (item.IsAvailable)
+                {
+                    <span class="absolute top-4 left-4 bg-secondary-container text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
+                        İlanda
+                    </span>
+                }
+            </div>
+            
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-primary leading-tight line-clamp-1">
+                        @item.Description
+                    </h3>
+                    <span class="text-xl font-extrabold text-primary">
+                        @item.Price.ToString("N0") ₺
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+                    <span class="material-symbols-outlined text-[18px]">location_on</span>
+                    @item.Address?.City, @item.Address?.District
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-outline">bed</span>
+                        <span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-outline">bathtub</span>
+                        <span class="text-sm font-bold text-on-surface">@item.NumberOfBathrooms</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-outline">square_foot</span>
+                        <span class="text-sm font-bold text-on-surface">@item.Area m²</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex justify-center items-center gap-4">
+<button class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-xl bg-primary text-on-primary font-bold">1</button>
+<button class="w-12 h-12 rounded-xl bg-surface-container-lowest text-on-surface-variant font-bold hover:bg-surface-container-high transition-colors">2</button>
+<button class="w-12 h-12 rounded-xl bg-surface-container-lowest text-on-surface-variant font-bold hover:bg-surface-container-high transition-colors">3</button>
+<button class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-surface-container border-t border-outline-variant/15">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1920px] mx-auto">
+<div class="text-xl font-bold text-primary">The Curated Estate</div>
+<div class="flex flex-wrap justify-center gap-8 font-['Inter'] text-sm uppercase tracking-widest">
+</div>
+<div class="text-on-surface-variant text-xs opacity-70">
+            © 2024 The Curated Estate. High-End Editorial Real Estate.
+        </div>
+</div>
+</footer>
+</body></html>
+
+
+
+
+@*     
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -92,7 +377,7 @@
 }
     </tbody>
 </table> *@
-<table class="table table-hover align-middle">
+@* <table class="table table-hover align-middle">
 	<thead class="table-dark">
 		<tr>
 			<th>@Html.DisplayNameFor(model => model.Title)</th>
@@ -136,23 +421,23 @@
 				<td class="text-center">
 					@if (item.IsAvailable)
 					{
-						<span class="badge rounded-pill bg-success">
-							<i class="bi bi-check-circle me-1"></i> Aktif
+						<span class="badge rounded-pill bg-success text-center">
+							Aktif
 						</span>
 					}
 					else
 					{
-						<span class="badge rounded-pill bg-danger">
-							<i class="bi bi-x-circle me-1"></i> Pasif
+						<span class="badge rounded-pill bg-danger text-center">
+							Pasif
 						</span>
 					}
 				</td>
                 <td class="text-center">
-                        @* @item.Address?.City *@
+                         @item.Address?.City 
                         @Html.DisplayFor(modelItem => item.Address.City)
-                </td>
+                @* </td>
                 <td class="text-center">
-                    @* @item.Address?.District *@
+                    @* @item.Address?.District 
                     @Html.DisplayFor(modelItem => item.Address.District)
                 </td>
 				<td>
@@ -183,7 +468,8 @@
 			</tr>
 		}
 	</tbody>
-</table>
+</table> 
+ *@
 @*
 
 	<div class="table-responsive rounded-3 overflow-hidden shadow-sm" style="border:1px solid #2e3138;">

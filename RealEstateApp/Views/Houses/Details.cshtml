@@ -89,13 +89,50 @@
                             @Html.DisplayFor(model => model.ContactNumber)
                         </dd>
 
-                        <dt class="col-5 text-white-50 fw-normal">
+                        @* <dt class="col-5 text-white-50 fw-normal">
                             @Html.DisplayNameFor(model => model.Employee)
                         </dt>
                         <dd class="col-7">
                             <span class="text-info fw-medium">@Html.DisplayFor(model => model.Employee.FirstName)</span>
+                        </dd> *@
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Address.City)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Address.City)
                         </dd>
 
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Address.District)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Address.District)
+                        </dd>
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Address.Street)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Address.Street)
+                        </dd>
+
+
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Address.BuildingNo)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Address.BuildingNo)
+                        </dd>
+                        
+                        <dt class="col-5 text-white-50 fw-normal">
+                            @Html.DisplayNameFor(model => model.Address.ApartmentNo)
+                        </dt>
+                        <dd class="col-7 fw-semibold text-white">
+                            @Html.DisplayFor(model => model.Address.ApartmentNo)
+                        </dd>
+
+                        
                     </dl>
                 </div>
 

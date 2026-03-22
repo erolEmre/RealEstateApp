@@ -86,7 +86,11 @@ namespace RealEstate.Core.Models
 
             IsAvailable = false;
         }
-
+        public void SetImageUrl(string imageUrl)
+        {
+            ImageUrl = imageUrl;
+        }
+              
         public void MarkAsAvailable()
         {
             IsAvailable = true;
@@ -115,8 +119,7 @@ namespace RealEstate.Core.Models
         public Address? Address { get; private set; } = default!;
 
         public int EmployeeId { get; private set; }
-        //private readonly List<string?> _images = new();
-        //public IReadOnlyCollection<string?> Images => _images;
+        public string ImageUrl { get; private set; } = default!;
 
         public Employee Employee { get; private set; }
     }
