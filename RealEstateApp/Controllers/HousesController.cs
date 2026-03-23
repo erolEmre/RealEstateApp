@@ -13,7 +13,7 @@ using RealEstateApp.WebUI.Models;
 
 namespace RealEstateApp.WebUI.Controllers
 {
-    // [Authorize(Roles = "Agent")]
+    [Authorize(Roles = "Agent")]
     public class HousesController : Controller
     {
         private readonly RealEstateContext _context;
@@ -219,11 +219,26 @@ namespace RealEstateApp.WebUI.Controllers
                 .Include(x=>x.Address)
                 .Include(x=>x.Employee)
                 .AsQueryable();
+            
+            searchModel.AvailableCities = await _context.Houses.Where(x => x.Address != null && !string.IsNullOrEmpty(x.Address.City))
+                .Select(x => x.Address.City)
+                .Distinct()
+                .ToListAsync();
+
+            searchModel.AvailableBathrooms = await _context.Houses.Where(x => x.NumberOfBathrooms != null && x.NumberOfBathrooms >= 0)
+                .Select(x => x.NumberOfBathrooms)
+                .Distinct()
+                .ToListAsync();
+
+            searchModel.AvailableRooms = await _context.Houses.Where(x => x.NumberOfRooms != null)
+                .Select(x => x.NumberOfRooms)
+                .Distinct()
+                .ToListAsync();
 
             // 2. FİLTRELEME (WHERE) ADIMLARI
             // Eğer kullanıcı minPrice kutusuna bir şey yazmışsa:
                         
-            // Price
+            // Fiyat
             if (searchModel.minPrice.HasValue)
             {
                 query = query.Where(x => x.Price >= searchModel.minPrice.Value);
@@ -233,7 +248,7 @@ namespace RealEstateApp.WebUI.Controllers
             {
                 query = query.Where(x => x.Price <= searchModel.maxPrice.Value);
             }
-            // Area
+            // Metrekare
             if (searchModel.minArea.HasValue)
             {
                 query = query.Where(x => x.Area >= searchModel.minArea.Value);
@@ -242,11 +257,21 @@ namespace RealEstateApp.WebUI.Controllers
             {
                 query = query.Where(x => x.Area >= searchModel.maxArea.Value);
             }
+                            // Şehir
             if(!String.IsNullOrEmpty(searchModel.City))
             {
                 query = query.Where(x => x.Address.City == searchModel.City);
             }
-
+            // Oda Sayısı
+            if(searchModel.numberOfRooms.HasValue)
+            {
+                query = query.Where(x => x.NumberOfRooms == searchModel.numberOfRooms.Value);
+            }
+            // Banyo Sayısı
+            if(searchModel.NumberOfBathrooms.HasValue)
+            {
+                query = query.Where(x => x.NumberOfBathrooms >= searchModel.NumberOfBathrooms.Value);
+            }
             // 3. SIRALAMA (ORDER BY) ADIMI
             // Senin yazdığın harika switch yapısını burada kullanıyoruz
             //query = house.SortOrder switch

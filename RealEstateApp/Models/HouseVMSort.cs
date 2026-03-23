@@ -1,4 +1,5 @@
 ﻿using RealEstate.Core.Models;
+using RealEstate.Core.Models.Enums;
 
 namespace RealEstateApp.WebUI.Models
 {
@@ -11,6 +12,11 @@ namespace RealEstateApp.WebUI.Models
         public int? NumberOfBathrooms { get; set; }
         public int? minArea { get; set; }
         public int? maxArea { get; set; }
+
+        public Enum_NumberOfRooms? numberOfRooms { get; set; }
+        public List<string> AvailableCities { get; set; } = new List<string>();
+        public List<int> AvailableBathrooms { get; set; } = new List<int>();
+        public List<Enum_NumberOfRooms> AvailableRooms { get; set; } = new List<Enum_NumberOfRooms>();
 
     }
 

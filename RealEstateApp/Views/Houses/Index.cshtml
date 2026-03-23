@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using RealEstate.Core.Models.Enums
 @model RealEstateApp.WebUI.Models.HouseVMSort
 
 @{
@@ -131,9 +132,9 @@
 <span class="material-symbols-outlined">tune</span>
                     Filtrele
                 </h2>
-<div class="space-y-8">
+
 <!-- Property Status -->
-<form asp-controller="Houses" asp-action="Index" method="get">
+<form asp-controller="Houses" asp-action="Index" method="get" class="space-y-4">
 <!-- Price Range -->
 <div>
 <span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
@@ -150,40 +151,64 @@ type="number"/>
 </div>
 <!-- City Select -->
 <div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Şehir</span>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Şehir</span>
 <select asp-for="City"
 class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
-<option></option>
-<option>Tokat</option>
-<option>İstanbul</option>
-<option>Ankara</option>
-<option>İzmir</option>
-<option>Muğla</option>
+  @{
+     // List<string> list = new List<string>();
+     <option hidden></option>
+     foreach (var item in Model.AvailableCities)                                                                                 
+   {
+      // var city = item.Address?.City;
+      // if(!String.IsNullOrEmpty(city))
+      // {
+      //  if(!list.Contains(city))
+      //   {
+      //  list.Add(city);
+      //   }
+      // }
+      <option>@item</option>
+   }                                      
+  }
+                                                
 </select>
 </div>
 <!-- Rooms & Bathrooms -->
 <div class="grid grid-cols-2 gap-4">
 <div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Oda</span>
-<select class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
-<option>1+1</option>
-<option>2+1</option>
-<option>3+1</option>
-<option>4+1+</option>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Oda</span>
+<select asp-for="numberOfRooms"  @* asp-items="Html.GetEnumSelectList<Enum_NumberOfRooms>()" *@
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+ @*  @{
+        var list = Model.Houses.Select(s => s.NumberOfRooms).Distinct().ToList(); 
+@foreach (var item in list)
+{
+    <option>@Html.DisplayFor(modelItem => item)</option>
+}
+} *@
+        <option hidden></option>
+@foreach (var item in Model.AvailableRooms)
+                                                    {
+                                                        <option value="@item">@Html.DisplayFor(x=> item)</option>
+                                                    }
+
 </select>
 </div>
 <div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Banyo</span>
-<select asp-for="NumberOfBathrooms" class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
-<option>1</option>
-<option>2</option>
-<option>3+</option>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"> Banyo</span>
+<select asp-for="NumberOfBathrooms" 
+class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+<option hidden></option>
+@foreach (var item in Model.AvailableBathrooms)
+ {
+    <option>@item</option>
+ }
 </select>
 </div>
 </div>
 <!-- Size -->
 <div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Metrekare (m²)</span>
+<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Metrekare (m²)</span>
 <div class="flex items-center gap-2">
 <input asp-for = "minArea"
 class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
@@ -202,7 +227,7 @@ type="number"/>
                     </button>
                     </form>
 </div>
-</div>
+
 </aside>
 
 <!-- Listings Grid -->
@@ -558,7 +583,7 @@ type="number"/>
 </div>
 
 *@
-<h1>Giriş</h1>
+@* <h1>Giriş</h1>
 @{
 	if (User.Identity.IsAuthenticated)
 	{
@@ -567,4 +592,4 @@ type="number"/>
 		</p>
 	}
    
-}
+} *@
