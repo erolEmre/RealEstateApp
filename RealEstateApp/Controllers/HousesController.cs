@@ -255,7 +255,7 @@ namespace RealEstateApp.WebUI.Controllers
             }
             if (searchModel.maxArea.HasValue)
             {
-                query = query.Where(x => x.Area >= searchModel.maxArea.Value);
+                query = query.Where(x => x.Area <= searchModel.maxArea.Value);
             }
                             // Şehir
             if(!String.IsNullOrEmpty(searchModel.City))
@@ -270,18 +270,19 @@ namespace RealEstateApp.WebUI.Controllers
             // Banyo Sayısı
             if(searchModel.NumberOfBathrooms.HasValue)
             {
-                query = query.Where(x => x.NumberOfBathrooms >= searchModel.NumberOfBathrooms.Value);
+                query = query.Where(x => x.NumberOfBathrooms == searchModel.NumberOfBathrooms.Value);
             }
-            // 3. SIRALAMA (ORDER BY) ADIMI
-            // Senin yazdığın harika switch yapısını burada kullanıyoruz
-            //query = house.SortOrder switch
-            //{
-            //    "date_asc" => query.OrderBy(x => x.ListingDate),
-            //    "date_desc" => query.OrderByDescending(x => x.ListingDate),
-            //    "price_asc" => query.OrderBy(x => x.Price),
-            //    // GÖREV 3: Fiyata göre azalan (price_desc) durumunu sen yaz
-            //    _ => query.OrderByDescending(x => x.ListingDate) // Varsayılan sıralama (En yeniler)
-            //};
+
+            //3.SIRALAMA(ORDER BY) ADIMI
+            //Senin yazdığın harika switch yapısını burada kullanıyoruz
+            query = searchModel.sortOrder switch
+            {
+                "date_asc" => query.OrderBy(x => x.ListingDate),
+                "price_desc" => query.OrderByDescending(x => x.Price),
+                "price_asc" => query.OrderBy(x => x.Price),
+                // GÖREV 3: Fiyata göre azalan (price_desc) durumunu sen yaz
+                _ => query.OrderByDescending(x => x.ListingDate) // Varsayılan sıralama (En yeniler)
+            };
 
             // 4. VERİYİ ÇEK VE MODELİ HAZIRLA
             // İşte şimdi ToListAsync() diyerek SQL'i çalıştırıyoruz!

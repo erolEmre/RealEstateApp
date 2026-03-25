@@ -12,7 +12,18 @@ namespace RealEstateApp.WebUI.Models
         public int? NumberOfBathrooms { get; set; }
         public int? minArea { get; set; }
         public int? maxArea { get; set; }
-
+        public bool isFiltered 
+        { 
+            get 
+            {
+                if (minArea.HasValue || maxArea.HasValue 
+                    || minPrice.HasValue || maxPrice.HasValue || !string.IsNullOrEmpty(City) || numberOfRooms.HasValue
+                    ||NumberOfBathrooms.HasValue)
+                    return true;
+                else return false;
+            } 
+        }
+        public string? sortOrder { get; set; }
         public Enum_NumberOfRooms? numberOfRooms { get; set; }
         public List<string> AvailableCities { get; set; } = new List<string>();
         public List<int> AvailableBathrooms { get; set; } = new List<int>();
