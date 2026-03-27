@@ -28,7 +28,8 @@ namespace RealEstateApp.WebUI.Models
         public DateTime ListingDate { get; set; }
         [Display(Name = "Uygunluk")]
         public bool IsAvailable { get; set; }
-        //public Address Address { get; set; } = default!;
+        public Employee Employee { get; set; }
+        public Address Address { get; set; } = default!;
 
         public string City { get; init; } = default!;
         public string District { get; init; } = default!;

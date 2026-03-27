@@ -51,13 +51,35 @@ namespace RealEstateApp.WebUI.Controllers
 
             var house = await _context.Houses
                 .Include(h => h.Employee)
+                .Include(a=> a.Address)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (house == null)
             {
                 return NotFound();
             }
+            HouseVM houseVM = new HouseVM
+            {
+                Address = house.Address,
+                //City = house.Address.City,
+                //District = house.Address.District,
+                //ApartmentNo = house.Address.ApartmentNo,
+                //BuildingNo = house.Address.BuildingNo,
+                //Street = house.Address.Street,
+                Area = house.Area,
+                ContactNumber = house.ContactNumber,
+                Description = house.Description,
+                Price = house.Price,
+                Title = house.Title,
+                Id  = house.Id,
+                IsAvailable = house.IsAvailable,
+                ListingDate = house.ListingDate,
+                ImageUrl = house.ImageUrl,
+                NumberOfBathrooms = house.NumberOfBathrooms,
+                NumberOfRooms = house.NumberOfRooms,
+                Employee = house.Employee
+            };
 
-            return View(house);
+            return View(houseVM);
         }
 
         // GET: Houses/Create
@@ -214,13 +236,16 @@ namespace RealEstateApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(HouseVMSort searchModel)
         {
+            var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             // 1. SORGUYU BAŞLAT (Henüz veritabanına gitmiyor, sadece SQL cümlesi hazırlıyoruz)
-             var query = _context.Houses
+            var query = _context.Houses
                 .Include(x=>x.Address)
-                .Include(x=>x.Employee)
+                .Include(x=>x.Employee)         
                 .AsQueryable();
-            
-            searchModel.AvailableCities = await _context.Houses.Where(x => x.Address != null && !string.IsNullOrEmpty(x.Address.City))
+
+            searchModel.AvailableCities = await _context.Houses.Where(x => x.Address != null && !string.IsNullOrEmpty(x.Address.City)
+            )
                 .Select(x => x.Address.City)
                 .Distinct()
                 .ToListAsync();
@@ -237,7 +262,26 @@ namespace RealEstateApp.WebUI.Controllers
 
             // 2. FİLTRELEME (WHERE) ADIMLARI
             // Eğer kullanıcı minPrice kutusuna bir şey yazmışsa:
-                        
+             
+            if(!string.IsNullOrEmpty(searchModel.SearchText))
+            {
+                // 1. DÖNGÜSÜZ SPLIT İŞLEMİ: Metni boşluklardan ayır ve birden fazla boşluk varsa onları temizle
+                var words = searchModel.SearchText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                // 2. HER KELİME İÇİN DÖNGÜ (EF Core'un SQL'e çevirebildiği güvenli yöntem)
+                foreach (var word in words)
+                {
+                    // Kullanıcı "İstanbul Havuzlu" yazdıysa:
+                    // Sistem "İstanbul" kelimesini şehirde VEYA başlıkta VEYA açıklamada arar.
+                    // Sonra "Havuzlu" kelimesini şehirde VEYA başlıkta VEYA açıklamada arar. (AND mantığı)
+                    query = query.Where(x =>
+                        (x.Address.City != null && x.Address.City.Contains(word)) ||
+                        (x.Title != null && x.Title.Contains(word)) ||
+                        (x.Description != null && x.Description.Contains(word))
+                    );
+                }
+            }
+
             // Fiyat
             if (searchModel.minPrice.HasValue)
             {

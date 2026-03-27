@@ -101,9 +101,22 @@
 </div>
 <div class="flex items-center gap-6">
 <div class="flex items-center gap-4 text-on-surface-variant">
-<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">account_circle</span>
+<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">
+   <a asp-controller="Account" asp-action="Profile">account_circle</a>
+    </span>
 </div>
-<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">Sign In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">
+   
+    @{
+      if(User.IsInRole("Agent")){
+      <a asp-controller="Account" asp-action="Logout" asp->@User.Identity.Name</a>                          
+    }
+    else 
+    {
+      <a asp-controller="Account" asp-action="Login">Sign In</a>                            
+    }
+    }
+                    </button>
 </div>
 </div>
 </nav>
@@ -118,16 +131,23 @@
         <div class="relative z-10 max-w-3xl px-6">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-5 tracking-tighter">Hayalindeki Evi Bul</h1>
             
+                  <form asp-controller="Houses" asp-action="Index" method="get" >
             <div class="bg-surface-container-lowest p-2 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2">
                 <div class="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl">
                     <span class="material-symbols-outlined text-outline">search</span>
-                    <input class="bg-transparent border-none focus:ring-0 w-full py-3 text-on-surface placeholder:text-outline" placeholder="Şehir, semt veya ilan başlığı ara..." type="text"/>
-                </div>
-                <button class="bg-secondary-container text-white px-8 py-3 rounded-xl font-bold active:scale-95 transition-transform">
+                        <input asp-for="SearchText"
+                        form="filterForm"
+                        class="bg-transparent border-none focus:ring-0 w-full py-3 text-on-surface placeholder:text-outline" 
+                        placeholder="Şehir, semt veya ilan başlığı ara..." type="text"/>
+                    </div>
+
+                <button type="submit"
+                    form="filterForm"
+                    class="bg-secondary-container text-white px-8 py-3 rounded-xl font-bold active:scale-95 transition-transform">
                     İlanları Keşfet
                 </button>
             </div>
-            
+            </form>
         </div>
     </div>
 </section>
@@ -246,7 +266,8 @@ type="number"/>
                         class="w-full bg-secondary text-on-primary py-4 rounded font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
                             Filtreyi temizle
                         </button>  
-                    </form>}
+                    </form>
+                    }
 </div>
 
                 </aside>
@@ -280,14 +301,28 @@ type="number"/>
     </form>
 </div>
 </div>
-    
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
     @foreach (var item in Model.Houses)
     {
-         <div class="group bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500">
+        <button type="submit">
+     <a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
+       
+         <div class="group bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500"            
+         style="cursor:pointer" >
             <div class="relative aspect-[4/3] overflow-hidden">
-                <img alt="@item.Description" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="@("https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" ?? item.ImageUrl)"/>
+                @{
+                    string filter = "grayscale(100%)";
+                    }
+                                    @if(item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
+                                    {
+                                        filter = "";
+                                    }
+
+                <img alt="@item.Description" 
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                src="@("https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" ?? item.ImageUrl)" style="filter:@filter"/>
                 
+
                 @if (item.IsAvailable)
                 {
                     <span class="absolute top-4 left-4 bg-secondary-container text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
@@ -327,6 +362,7 @@ type="number"/>
                 </div>
             </div>
         </div>
+</a> </button>
     }
 </div>
 

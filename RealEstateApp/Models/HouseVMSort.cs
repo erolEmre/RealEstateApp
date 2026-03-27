@@ -12,6 +12,7 @@ namespace RealEstateApp.WebUI.Models
         public int? NumberOfBathrooms { get; set; }
         public int? minArea { get; set; }
         public int? maxArea { get; set; }
+        public string? SearchText { get; set; }
         public bool isFiltered 
         { 
             get 
