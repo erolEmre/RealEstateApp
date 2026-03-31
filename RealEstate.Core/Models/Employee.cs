@@ -13,7 +13,7 @@ namespace RealEstate.Core.Models
             Email = email;
         }
         public int Id { get; private set; }
-        public string Auth0Sub { get; private set; }
+        public string Auth0Sub { get; init; }
         public string Email { get; private set; }
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;

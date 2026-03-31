@@ -59,12 +59,11 @@ namespace RealEstateApp.WebUI.Controllers
             }
             HouseVM houseVM = new HouseVM
             {
-                Address = house.Address,
-                //City = house.Address.City,
-                //District = house.Address.District,
-                //ApartmentNo = house.Address.ApartmentNo,
-                //BuildingNo = house.Address.BuildingNo,
-                //Street = house.Address.Street,
+                City = house.Address.City,
+                District = house.Address.District,
+                ApartmentNo = house.Address.ApartmentNo,
+                BuildingNo = house.Address.BuildingNo,
+                Street = house.Address.Street,
                 Area = house.Area,
                 ContactNumber = house.ContactNumber,
                 Description = house.Description,
@@ -97,16 +96,22 @@ namespace RealEstateApp.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HouseVM houseVM)
         {
-            if (!ModelState.IsValid)
-                return View(houseVM);
-
-            var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var employeeId = houseVM.Employee.Auth0Sub;
+            
             var employee = await _context.Employees
-                .FirstOrDefaultAsync(e => e.Auth0Sub == employeeId);
-            if (employee == null) 
+               .FirstOrDefaultAsync(e => e.Auth0Sub == employeeId);
+            houseVM.Employee = employee;
+
+            if (employee == null)
             {
                 throw new Exception("");
             }
+
+            if (!ModelState.IsValid)
+                return View(houseVM);
+
+            
+           
 
             var address = new Address
             {
