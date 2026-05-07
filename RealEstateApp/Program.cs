@@ -30,7 +30,7 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
     options.ClientId = builder.Configuration["Auth0:ClientId"];
     if (string.IsNullOrEmpty(options.Domain) || string.IsNullOrEmpty(options.ClientId))
 {
-    // Değerler gelmiyorsa uygulama burada dursun ve hata mesajını versin
+    
     throw new Exception("HATA: Auth0 konfigürasyon değerleri okunamadı! .env dosyasını veya Docker environment değişkenlerini kontrol edin.");
 }
     options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
@@ -54,7 +54,6 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
                 // Yeni çalışan oluştur
                 employee = new Employee(sub, email ?? "no-email@domain.com");
 
-                // Auth0'ın standart anahtarlarını deniyoruz: given_name ve family_name
                 employee.FirstName = claims.FirstOrDefault(c => c.Type == "given_name")?.Value
                                     ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
                                     ?? "Unknown";

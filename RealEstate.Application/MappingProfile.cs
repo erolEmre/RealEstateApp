@@ -9,24 +9,28 @@ using System.Threading.Tasks;
 
 namespace RealEstate.Application.Mappings
 {
-    public class MappingProfile : Profile 
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-
             CreateMap<House, HouseVM>()
-            // Eğer House içinde "Address.City" varsa ve VM içinde sadece "City" varsa:
-            // .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
+            // Adres parçalarını VM'in köküne çıkar (Flattening)
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
             .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.Address.District))
             .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
             .ForMember(dest => dest.BuildingNo, opt => opt.MapFrom(src => src.Address.BuildingNo))
             .ForMember(dest => dest.ApartmentNo, opt => opt.MapFrom(src => src.Address.ApartmentNo))
-            //.ForMember(dest=> dest.Employee.Id, opt=>opt.MapFrom(src=> src.EmployeeId))
-            .ReverseMap(); // Bu sayede VM -> House dönüşümü de aktif olur
+
+                // Çalışan (Employee) bilgilerini VM'e ekle
+                .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Employee.Id))
+                .ForMember(dest => dest.EmployeeAuth0Sub, opt => opt.MapFrom(src => src.Employee.Auth0Sub));
+
+            // ReverseMap() yok, çünkü sadece GET (Read-Only) için kullanıyoruz.    
+
+            // Not: Title, Price, Description gibi isimleri aynı olan alanları 
+            // AutoMapper zaten otomatik olarak eşler, onları tek tek yazmana gerek yok.
 
 
-            //CreateMap<Employee, Employee>().ReverseMap();
         }
     }
 }

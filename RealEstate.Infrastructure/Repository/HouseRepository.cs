@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
+using RealEstate.Core.Models.Enums;
 
 namespace RealEstate.Infrastructure.Repository
 {
@@ -20,6 +22,7 @@ namespace RealEstate.Infrastructure.Repository
         public async Task AddAsync(House house)
         {
             await _context.Houses.AddAsync(house);
+            _context.SaveChanges();
         }
         public async Task UpdateAsync(House house)
         {
@@ -48,6 +51,46 @@ namespace RealEstate.Infrastructure.Repository
                 h.MarkAsUnavailable();
             }
             _context.SaveChanges();
+        }
+
+        public async void SaveChanges()
+        {
+             _context.SaveChanges();
+        }
+        
+        public IQueryable<House> GetAllWitAsQuery()
+        {
+            return _context.Houses
+              .Include(h => h.Employee)
+              .Include(a=> a.Address)
+              .AsQueryable();
+        }
+
+        public async Task<List<string>> GetAvailableCitiesAsync()
+        {
+            return await _context.Houses.Where(x => x.Address.City != null)
+                .Select(x => x.Address.City)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<List<Enum_NumberOfRooms>> GetAvailableRoomCountsAsync()
+        {
+             return await _context.Houses.Where(x => x.NumberOfRooms != null
+                  && x.NumberOfRooms >= 0)
+                 .Select(x => x.NumberOfRooms)
+                 .Distinct()
+                 .ToListAsync();
+    
+        }
+
+        public async Task<List<int>> GetAvailableBathroomCountAsync()
+        {
+            return await _context.Houses.Where(x => x.NumberOfBathrooms != null
+                  && x.NumberOfBathrooms >= 0)
+                 .Select(x => x.NumberOfBathrooms)
+                 .Distinct()
+                 .ToListAsync();
         }
     }
 }
