@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model RealEstateApp.WebUI.Models.HouseVM
+@model RealEstate.Application.ViewModel.HouseVM
 
 @{
     ViewData["Title"] = "Detaylar";
@@ -11,7 +11,7 @@
 <html class="scroll-smooth" lang="tr"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Azure Estate | Mülk Detayı</title>
+<title>@Model.Title</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -118,14 +118,21 @@ src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC6G2GEr9ahIXdSGe59zBq0
 
                             <div class="space-y-4 max-w-3xl">
                                 <div class="flex Models-center gap-3">
-                                    <span class="bg-green-500/20 text-green-400 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase border border-green-500/30">Müsait</span>
-                                    <span class="text-slate-400 text-sm font-medium flex Models-center gap-1">
-                                        <span class="material-symbols-outlined text-sm">calendar_today</span>
+                            @{
+                                    string rentalStatus = "";
+                                    if (@Model.IsRental) rentalStatus = "Kiralık";
+                                    else rentalStatus = "Satılık";
+                                    <span class="bg-green-500 text-black-400 px-4 py-2 
+                                                        rounded-full text-xs font-bold tracking-widest uppercase 
+                                    border border-black-400/30">@rentalStatus</span>
+                                    }
+                                    @* <span class="text-slate-500 text-md font-medium flex Models-center gap-1">
+                                        <span class="material-symbols-outlined text-md">calendar_today</span>
                                         @Model.ListingDate.ToShortDateString()
-                                    </span>
+                                    </span> *@
                                 </div>
                                 <h1 class="font-headline text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
-                                    Azure Horizon Penthouse
+                                   @Model.Title / @Model.Description
                                 </h1>
                                 <p class="text-lg text-slate-300 font-medium flex Models-center gap-2">
                                     <span class="material-symbols-outlined text-blue-400">location_on</span>
@@ -161,8 +168,9 @@ src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC6G2GEr9ahIXdSGe59zBq0
                         
 <div class="bg-slate-900/60 p-6 rounded-3xl border border-slate-800/50 hover:bg-slate-800/60 transition-colors">
 <span class="material-symbols-outlined text-blue-400 text-3xl mb-4">door_open</span>
-<div class="text-2xl font-bold text-white">@Html.DisplayFor(numberOfRoom => Model.NumberOfRooms)</div>
-<div class="text-slate-500 text-xs font-label uppercase tracking-widest mt-1">Oda</div>
+@* <div class="text-2xl font-bold text-white">@Html.DisplayFor(m => m.NumberOfRooms)</div> *@
+<div class="text-2xl font-bold text-white">@Html.DisplayFor(m => m.NumberOfRooms)</div>
+ <div class="text-slate-500 text-xs font-label uppercase tracking-widest mt-1">Oda</div>
 </div>
 <div class="bg-slate-900/60 p-6 rounded-3xl border border-slate-800/50 hover:bg-slate-800/60 transition-colors">
 <span class="material-symbols-outlined text-blue-400 text-3xl mb-4">shower</span>
@@ -231,7 +239,7 @@ src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTS62CwI5CYFOSKdpQAdKgj
                         var employeeId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                         if (User.Identity.IsAuthenticated && User.IsInRole("Agent"))
                         {
-                            if (Model.Employee.Auth0Sub != null && employeeId == Model.Employee.Auth0Sub)
+                            if (Model.EmployeeAuth0Sub != null && employeeId == Model.EmployeeAuth0Sub)
                             {
                                 <button type="submit" 
                                 class="w-full py-4 px-6 bg-primary text-white rounded-full font-bold text-lg hover:bg-primary-container transition-all flex Models-center justify-center gap-2 active:scale-95">
@@ -244,23 +252,16 @@ src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTS62CwI5CYFOSKdpQAdKgj
                     }
                     
                             
-<button class="w-full py-4 px-6 bg-slate-800 text-slate-200 rounded-full font-bold text-lg hover:bg-slate-700 transition-all flex Models-center justify-center gap-2 active:scale-95">
+<button class="w-100 py-4 px-6 bg-slate-800 text-slate-200 
+rounded-full font-bold text-lg hover:bg-slate-700 
+transition-all flex Models-center justify-center active:scale-95">
 <span class="material-symbols-outlined">arrow_back</span>
-                               <a asp-action="Index" class="btn btn-outline-light px-4">Listeye Dön</a>
+                               <a asp-controller="Houses" asp-action="Index" class="btn btn-outline-light px-4">Listeye Dön</a>
                             </button>
 </div>
 </div>
 <!-- Quick Tools -->
-<div class="grid grid-cols-2 gap-4">
-<button class="p-4 bg-slate-900/40 rounded-3xl border border-slate-800/50 hover:bg-slate-800 transition-all text-slate-400 flex flex-col Models-center gap-2 group">
-<span class="material-symbols-outlined group-hover:text-blue-400 transition-colors">share</span>
-<span class="text-xs font-label uppercase">Paylaş</span>
-</button>
-<button class="p-4 bg-slate-900/40 rounded-3xl border border-slate-800/50 hover:bg-slate-800 transition-all text-slate-400 flex flex-col Models-center gap-2 group">
-<span class="material-symbols-outlined group-hover:text-blue-400 transition-colors">picture_as_pdf</span>
-<span class="text-xs font-label uppercase">PDF İndir</span>
-</button>
-</div>
+
 </div>
 </div>
 </section>

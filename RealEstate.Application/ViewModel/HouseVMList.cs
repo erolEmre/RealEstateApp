@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstateApp.WebUI.Models
+namespace RealEstate.Application.ViewModel
 {
     public class HouseVMList
     {

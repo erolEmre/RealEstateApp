@@ -16,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
+// Program.cs
+
+
 
 builder.Configuration.AddEnvironmentVariables();
 
@@ -36,22 +39,30 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
     {
         OnTokenValidated = async context =>
         {
-            var sub = context.Principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var email = context.Principal.FindFirst("name")?.Value; // Burayı değiştirmeyi unutma name,
-                                                                    // mail olarak döndüğü için şimdilik bunu verdim ki
-                                                                    // sistem çalışabilsin.
+            var claims = context.Principal.Claims;
+            var sub = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            var db = context.HttpContext.RequestServices
-                .GetRequiredService<RealEstateContext>();
+            // Auth0 genellikle emaili "email" veya ClaimTypes.Email olarak gönderir
+            var email = claims.FirstOrDefault(c => c.Type == "email")?.Value
+                        ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-            var employee = db.Employees
-                .FirstOrDefault(e => e.Auth0Sub == sub);
+            var db = context.HttpContext.RequestServices.GetRequiredService<RealEstateContext>();
+            var employee = await db.Employees.FirstOrDefaultAsync(e => e.Auth0Sub == sub);
 
             if (employee == null)
             {
-                employee = new Employee(sub, email);
-                employee.FirstName = context.Principal.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown";
-                employee.LastName = context.Principal.FindFirst(ClaimTypes.Surname)?.Value ?? "Unknown";
+                // Yeni çalışan oluştur
+                employee = new Employee(sub, email ?? "no-email@domain.com");
+
+                // Auth0'ın standart anahtarlarını deniyoruz: given_name ve family_name
+                employee.FirstName = claims.FirstOrDefault(c => c.Type == "given_name")?.Value
+                                    ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
+                                    ?? "Unknown";
+
+                employee.LastName = claims.FirstOrDefault(c => c.Type == "family_name")?.Value
+                                   ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value
+                                   ?? "Unknown";
+
                 db.Employees.Add(employee);
                 await db.SaveChangesAsync();
             }
@@ -68,6 +79,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+builder.Services.AddAutoMapper(cfg => { }, typeof(RealEstate.Application.Mappings.MappingProfile).Assembly);
 
 var app = builder.Build();
 

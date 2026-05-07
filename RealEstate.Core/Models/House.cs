@@ -27,7 +27,9 @@ namespace RealEstate.Core.Models
             ChangeArea(area);
             ChangePrice(price);
             IsAvailable = true;
+            IsRental = true;
         }
+       
         private void EnsureOwner(int currentEmployeeId)
         {
             if (EmployeeId != currentEmployeeId)
@@ -57,6 +59,8 @@ namespace RealEstate.Core.Models
         public int NumberOfBathrooms { get; private set; } = 1;
         [Display(Name = "Metrekare")]
         public double Area { get; private set; }
+        [Display(Name="Kiralık")]
+        public bool IsRental { get; private set; }
 
         public void ChangeArea(double area)
         {
@@ -64,6 +68,10 @@ namespace RealEstate.Core.Models
                 throw new Exception("Area must be positive.");
 
             Area = area;
+        }
+        public void ListingStatus(bool isRental)
+        {
+            IsRental = isRental;
         }
         [DisplayFormat(DataFormatString = "{0:G29}", ApplyFormatInEditMode = true)]
         [Display(Name = "Fiyat")]

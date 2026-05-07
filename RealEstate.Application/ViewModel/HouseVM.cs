@@ -3,7 +3,7 @@ using RealEstate.Core.Models;
 using RealEstate.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace RealEstateApp.WebUI.Models
+namespace RealEstate.Application.ViewModel
 {
     public class HouseVM
     {
@@ -30,9 +30,18 @@ namespace RealEstateApp.WebUI.Models
         [Display(Name = "Uygunluk")]
         public bool IsAvailable { get; set; }
         //public Address Address { get; set; } = default!;
+        public bool IsRental { get; set; }
 
+       
+        public int EmployeeId { get; set; }
+        public string EmployeeAuth0Sub { get; set; }
         [ValidateNever]
-        public Employee Employee { get; set; }
+        public string EmployeeEmail { get; set; }
+        [ValidateNever]
+        public string EmployeeFirstName{ get; set; }
+        [ValidateNever]
+        public string EmployeeLastName { get; set; }
+
 
         public string City { get; init; } = default!;
         public string District { get; init; } = default!;

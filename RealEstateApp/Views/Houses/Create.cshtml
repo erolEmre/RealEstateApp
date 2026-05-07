@@ -1,4 +1,4 @@
-﻿@model RealEstateApp.WebUI.Models.HouseVM;
+﻿@model RealEstate.Application.ViewModel.HouseVM;
 @using RealEstate.Core.Models.Enums;
 @using System.Security.Claims
 
@@ -106,7 +106,9 @@
 <!-- Top Navigation Bar (Shared Component Reference) -->
 <nav class="fixed top-0 w-full z-50 bg-slate-950/70 backdrop-blur-xl shadow-sm dark:shadow-none">
 <div class="flex justify-between items-center px-8 py-4 max-w-screen-2xl mx-auto">
-<div class="text-2xl font-bold tracking-tighter text-blue-50 font-headline">Real Estate</div>
+<div class="text-2xl font-bold tracking-tighter text-blue-50 font-headline">
+     <a asp-controller="Houses" asp-action="Index">Real Estate</a>
+    </div>
 
 <div class="flex items-center gap-4">
 <button class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-headline text-sm font-bold tracking-tight active:scale-95 duration-200 ease-in-out">
@@ -161,7 +163,11 @@ outline-none font-body text-sm"
 
 </header>
 <form asp-controller="Houses" asp-action="Create" method="post" id="House" class="space-y-10">
-    
+    <input type="hidden" asp-for="EmployeeId" />
+    <input type="hidden" asp-for="EmployeeAuth0Sub" />
+    <input type="hidden" asp-for="EmployeeEmail" />
+    <input type="hidden" asp-for="EmployeeFirstName" />
+    <input type="hidden" asp-for="EmployeeLastName" />
 <!-- Essential Information -->
 <div class="space-y-6">
 <div class="relative group">
@@ -248,7 +254,7 @@ placeholder="0555 555 11 11" type="tel"/>
 </div>
 <div class="flex gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
 <div class="flex flex-col gap-2">
-<span class="text-xs font-label uppercase tracking-widest text-slate-500 font-bold">Uygunluk</span>
+<span class="text-xs font-label uppercase tracking-widest text-slate-500 font-bold">İlana Açılsın Mı?</span>
 <label class="relative inline-flex items-center cursor-pointer mt-2">
     <input asp-for="IsAvailable" class="sr-only peer" type="checkbox" />
     
@@ -259,11 +265,23 @@ placeholder="0555 555 11 11" type="tel"/>
                 after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary">
     </div>
 </label>
+<span class="text-xs font-label uppercase tracking-widest text-slate-500 font-bold">Kiralık Mı?</span>
+<label class="relative inline-flex items-center cursor-pointer mt-2">
+    <input asp-for="IsRental" class="sr-only peer" type="checkbox" />
+    
+    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer 
+                peer-checked:after:translate-x-full peer-checked:after:border-white 
+                after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                after:bg-white after:border-gray-300 after:border after:rounded-full 
+                after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary">
+    </div>
+    
+</label>
+
 </div>
 </div>
 </div>
 <!-- Action Footer -->
-<input type="hidden" asp-for="Employee.Auth0Sub" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
 <div class="pt-8 pb-12">
     
 <button class="w-full bg-secondary text-white font-headline text-lg font-bold py-5 rounded-2xl shadow-xl shadow-secondary/20 hover:bg-secondary-container active:scale-[0.98] transition-all flex items-center justify-center gap-3" 

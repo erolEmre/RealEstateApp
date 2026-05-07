@@ -1,7 +1,7 @@
 ﻿using RealEstate.Core.Models;
 using RealEstate.Core.Models.Enums;
 
-namespace RealEstateApp.WebUI.Models
+namespace RealEstate.Application.ViewModel
 {
     public class HouseVMSort
     {

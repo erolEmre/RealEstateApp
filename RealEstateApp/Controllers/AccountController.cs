@@ -22,7 +22,7 @@ namespace RealEstateApp.WebUI.Controllers
         public async Task Logout()
         {
             var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
-        .WithRedirectUri(Url.Action("Index", "Home", null, Request.Scheme))
+        .WithRedirectUri(Url.Action("Index", "Houses", null, Request.Scheme))
         .Build();
 
             await HttpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);

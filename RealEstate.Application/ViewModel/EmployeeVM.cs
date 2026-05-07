@@ -1,5 +1,5 @@
 ﻿using RealEstate.Core.Models;
-namespace RealEstateApp.WebUI.Models
+namespace RealEstate.Application.ViewModel
 {
     public class EmployeeVM
     {

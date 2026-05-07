@@ -1,10 +1,11 @@
 ﻿@using System.Security.Claims
 @using RealEstate.Core.Models.Enums
-@model RealEstateApp.WebUI.Models.HouseVMSort
+@model RealEstate.Application.ViewModel.HouseVMSort
 
 @{
-	ViewData["Title"] = "Giriş";
+    ViewData["Title"] = "Giriş";
     Layout = null;
+    string filter = "";
 }
 
 
@@ -95,8 +96,11 @@
 <div class="flex justify-between items-center px-8 py-4 max-w-[1280px] mx-auto">
 <div class="text-2xl font-extrabold text-primary tracking-tighter">
     <a style="margin-right: 10px; asp-controller="Houses" asp-action="Index">Real Estate</a>
-          <a asp-controller="Houses" asp-action="Create"> Ev İlanı oluştur </a>                          
-    
+                @if (User.IsInRole("Agent"))
+                    {
+                        <a asp-controller="Houses" asp-action="Create"> Ev İlanı oluştur </a>                      
+                    }                    
+
 
     </div>
 <div class="hidden md:flex items-center gap-8 font-['Manrope'] font-medium tracking-tight">
@@ -105,21 +109,21 @@
 <div class="flex items-center gap-6">
 <div class="flex items-center gap-4 text-on-surface-variant">
 <span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">
-   <a asp-controller="Account" asp-action="Profile">account_circle</a>
-    </span>
+                            @if (User.IsInRole("Agent"))
+                            {
+                                <a asp-controller="Account" asp-action="Profile">account_circle</a>                
+                            }
+                        </span>
 </div>
-<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">
-   
-    @{
-      if(User.IsInRole("Agent")){
+ @if(User.IsInRole("Agent"))
+ {
+ <button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">
+       
       <a asp-controller="Account" asp-action="Logout" asp->@User.Identity.Name</a>                          
-    }
-    else 
-    {
-      <a asp-controller="Account" asp-action="Login">Sign In</a>                            
-    }
-    }
+    
                     </button>
+ }
+ 
 </div>
 </div>
 </nav>
@@ -282,7 +286,7 @@ type="number"/>
 <section class="flex-1">
 <div id="ilanlar"class="flex justify-between items-end mb-8">
 <div>
-<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.Houses.Count emlak bulundu</h2>
+<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.Houses.Count ilan bulundu</h2>
 </div>
 <div class="flex items-center gap-3">
     <span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
@@ -292,7 +296,7 @@ type="number"/>
         <select asp-for="sortOrder" 
         form="filterForm" 
         onchange="document.getElementById('filterForm').submit();"
-        class="bg-transparent border-none font-bold text-primary focus:ring-0 cursor-pointer">
+        class="bg-black border-none font-bold text-primary focus:ring-0 cursor-pointer">
     
         <option hidden value="">Seçiniz...</option>
         <option value="date_asc">En Yeni İlanlar</option>
@@ -307,38 +311,63 @@ type="number"/>
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
     @foreach (var item in Model.Houses)
     {
-        <button type="submit">
+                            
+                                string ListingStatusName = "";
+                                if (item.IsRental) ListingStatusName = "Kiralık";
+                                else ListingStatusName = "Satılık";
+                            
      <a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
-       
-         <div class="group bg-surface-container-lowest rounded-3xl overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] transition-all duration-500"            
-         style="cursor:pointer" >
+        
+         <div class="group bg-surface-container-lowest rounded-3xl 
+            overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] 
+            transition-all duration-500"            
+            style="cursor:pointer" >
             <div class="relative aspect-[4/3] overflow-hidden">
-                @{
-                    string filter = "grayscale(100%)";
-                    }
+               
+                @if(User.IsInRole("Agent")) {
+                   filter = "grayscale(100%)";
+                    
                                     @if(item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
                                     {
                                         filter = "";
                                     }
-
+                }   
                 <img alt="@item.Description" 
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                src="@("https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" ?? item.ImageUrl)" style="filter:@filter"/>
+                src="@(item.ImageUrl ?? "https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" )" style="filter:@filter"/>
                 
-
+                
                 @if (item.IsAvailable)
                 {
-                    <span class="absolute top-4 left-4 bg-secondary-container text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest">
-                        İlanda
-                    </span>
-                }
-            </div>
+                    string color = "secondary-container";
+                    if (item.IsRental) color = "black";
+
+                                                <span class="absolute top-4 left-4 bg-@color
+                    text-white px-4 py-1.5 rounded-full 
+                    text-xs font-bold uppercase tracking-widest">
+                                                    @ListingStatusName
+                                                </span>
+                }    
+                                        </div>
             
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-xl font-bold text-primary leading-tight line-clamp-1">
-                        @item.Description
-                    </h3>
+                <h2 class="text-xl font-bold text-primary leading-tight line-clamp-1">@item.Title</h2>
+                 
+                </div>
+                <div class="flex justify-between items-start mb-2">
+                    <h5 class="text font-bold text-primary leading-tight line-clamp-1">
+                                                        @{
+                                                            string myText = "";
+
+                                                            if (@item.Description.Length >= 12)
+                                                                myText = item.Description.Substring(0, 10) + "...";
+                                                            else
+                                                                myText = item.Description;
+                                                        }
+                                                        @myText
+                                                        
+                    </h5>
                     <span class="text-xl font-extrabold text-primary">
                         @item.Price.ToString("N0") ₺
                     </span>
@@ -351,6 +380,7 @@ type="number"/>
 
                 <div class="flex items-center justify-between pt-4 border-t border-outline-variant">
                     <div class="flex items-center gap-2">
+                        
                         <span class="material-symbols-outlined text-outline">bed</span>
                         <span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
                     </div>
@@ -365,7 +395,7 @@ type="number"/>
                 </div>
             </div>
         </div>
-</a> </button>
+</a> 
     }
 </div>
 
