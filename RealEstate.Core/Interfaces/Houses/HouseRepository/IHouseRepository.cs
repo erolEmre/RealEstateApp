@@ -7,18 +7,18 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstate.Core.Interfaces
+namespace RealEstate.Core.Interfaces.Houses.HouseRepository
 {
     public interface IHouseRepository
     {
-        public Task<House?> GetByIdAsync(int id);
-        public Task<List<House>> GetAllAsync();
-        public Task AddAsync(House house);
-        public Task UpdateAsync(House house);
-        public void Remove(House house);
+        public Task<RealEstate.Core.Models.House?> GetByIdAsync(int id);
+        public Task<List<RealEstate.Core.Models.House>> GetAllAsync();
+        public Task AddAsync(RealEstate.Core.Models.House house);
+        public Task UpdateAsync(RealEstate.Core.Models.House house);
+        public void Remove(RealEstate.Core.Models.House house);
         public void SaveChanges();
-        //public Task<List<House>> GetAllWithEmployeesAsync();
-        public IQueryable<House> GetAllWitAsQuery();
+        
+        public IQueryable<RealEstate.Core.Models.House> GetAllWitAsQuery();
         Task<List<string>> GetAvailableCitiesAsync();
         Task<List<Enum_NumberOfRooms>> GetAvailableRoomCountsAsync();
         public Task<List<int>> GetAvailableBathroomCountAsync();

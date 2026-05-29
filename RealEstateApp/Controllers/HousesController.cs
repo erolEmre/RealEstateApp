@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using RealEstate.Application.ViewModel;
-using RealEstate.Core.Interfaces;
+using RealEstate.Application.Interfaces;
+using RealEstate.Application.ViewModel.Houses;
+using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
 using RealEstate.Core.Models.Enums;
 using RealEstate.Infrastructure.Context;
@@ -22,13 +23,15 @@ namespace RealEstateApp.WebUI.Controllers
     [Authorize(Roles = "Agent")]
     public class HousesController : Controller
     {
-        private readonly IHouseRepository _houseRepositroy;
+        private readonly IHouseRepository _houseRepository;
         private readonly IMapper _mapper;
+        readonly IHouseFilterService _houseFilterService;
 
-        public HousesController(IMapper mapper,IHouseRepository houseRepository)
+        public HousesController(IMapper mapper, IHouseRepository houseRepository, IHouseFilterService houseFilterService)
         {
-            _houseRepositroy = houseRepository;
+            _houseRepository = houseRepository;
             _mapper = mapper;
+            _houseFilterService = houseFilterService;
         }
 
         [AllowAnonymous]
@@ -37,76 +40,13 @@ namespace RealEstateApp.WebUI.Controllers
         {
             var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var query = _houseRepositroy.GetAllWitAsQuery();
+            var query = _houseRepository.GetAllWitAsQuery();
 
-            searchModel.AvailableCities = await _houseRepositroy.GetAvailableCitiesAsync();
-
-            searchModel.AvailableRooms = await _houseRepositroy.GetAvailableRoomCountsAsync();
+            searchModel.Houses = _houseFilterService.Apply(query, searchModel).ToList();
+            searchModel.AvailableCities = await _houseRepository.GetAvailableCitiesAsync();
+            searchModel.AvailableRooms = await _houseRepository.GetAvailableRoomCountsAsync();
+            searchModel.AvailableBathrooms = await _houseRepository.GetAvailableBathroomCountAsync();
             
-            searchModel.AvailableBathrooms = await _houseRepositroy.GetAvailableBathroomCountAsync();
-            
-            if (!string.IsNullOrEmpty(searchModel.SearchText))
-            {
-                var words = searchModel.SearchText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                // 2. HER KELİME İÇİN DÖNGÜ (EF Core'un SQL'e çevirebildiği güvenli yöntem)
-                foreach (var word in words)
-                {
-                    // Kullanıcı "İstanbul Havuzlu" yazdıysa:
-                    // Sistem "İstanbul" kelimesini şehirde VEYA başlıkta VEYA açıklamada arar.
-                    // Sonra "Havuzlu" kelimesini şehirde VEYA başlıkta VEYA açıklamada arar. (AND mantığı)
-                    query = query.Where(x =>
-                        (x.Address.City != null && x.Address.City.Contains(word)) ||
-                        (x.Title != null && x.Title.Contains(word)) ||
-                        (x.Description != null && x.Description.Contains(word))
-                    );
-                }
-            }
-
-            if (searchModel.minPrice.HasValue)
-            {
-                query = query.Where(x => x.Price >= searchModel.minPrice.Value);
-            }
-
-            if (searchModel.maxPrice.HasValue)
-            {
-                query = query.Where(x => x.Price <= searchModel.maxPrice.Value);
-            }
-            // Metrekare
-            if (searchModel.minArea.HasValue)
-            {
-                query = query.Where(x => x.Area >= searchModel.minArea.Value);
-            }
-            if (searchModel.maxArea.HasValue)
-            {
-                query = query.Where(x => x.Area <= searchModel.maxArea.Value);
-            }
-            // Şehir
-            if (!String.IsNullOrEmpty(searchModel.City))
-            {
-                query = query.Where(x => x.Address.City == searchModel.City);
-            }
-            // Oda Sayısı
-            if (searchModel.numberOfRooms.HasValue)
-            {
-                query = query.Where(x => x.NumberOfRooms == searchModel.numberOfRooms.Value);
-            }
-            // Banyo Sayısı
-            if (searchModel.NumberOfBathrooms.HasValue)
-            {
-                query = query.Where(x => x.NumberOfBathrooms == searchModel.NumberOfBathrooms.Value);
-            }
-
-            query = searchModel.sortOrder switch
-            {
-                "date_asc" => query.OrderBy(x => x.ListingDate),
-                "price_desc" => query.OrderByDescending(x => x.Price),
-                "price_asc" => query.OrderBy(x => x.Price),
-                _ => query.OrderByDescending(x => x.ListingDate) // Varsayılan sıralama (En yeniler)
-            };
-
-            searchModel.Houses = await query.ToListAsync();
-
             return View(searchModel);
         }
         [AllowAnonymous]
@@ -117,7 +57,7 @@ namespace RealEstateApp.WebUI.Controllers
                 return NotFound();
             }
 
-            var house = await _houseRepositroy.GetAllWitAsQuery()
+            var house = await _houseRepository.GetAllWitAsQuery()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (house == null)
             {
@@ -137,22 +77,19 @@ namespace RealEstateApp.WebUI.Controllers
             }, "Auth0");
         }
 
-        // GET: Houses/Create
+     
         [Authorize(Roles = "Agent")]
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            // 1. Oturum açmış kullanıcının Auth0 ID'sini al
+          
             var auth0Sub = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            // 2. Veritabanından bu çalışanı bul
-            var Houses = await _houseRepositroy
+            var Houses = await _houseRepository
                 .GetAllWitAsQuery()
                 .FirstOrDefaultAsync(x => x.Employee.Auth0Sub == auth0Sub);
 
 
-            // 3. Modeli daha en baştan bu bilgilerle doldur
             var model = new HouseVM
             {
                 EmployeeId = Houses.Employee?.Id ?? 0,
@@ -160,12 +97,8 @@ namespace RealEstateApp.WebUI.Controllers
                 EmployeeEmail = Houses.Employee.Email,
                 EmployeeFirstName = Houses.Employee.FirstName,
                 EmployeeLastName = Houses.Employee.LastName,
-                                                              
-                // Eğer çalışan yoksa 0 döner
-                // İstersen ekranda göstermek için ismini de ekleyebilirsin
+                 
             };
-
-            // 4. İçi dolu modeli View'a gönder (Böylece Layout hatası almazsın)
             return View(model);
         }
 
@@ -173,11 +106,6 @@ namespace RealEstateApp.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HouseVM houseVM)
         {
-            if (houseVM.EmployeeId == 0)
-            {
-                throw new Exception("");
-            }
-
             if (!ModelState.IsValid)
                 return View(houseVM);
 
@@ -207,7 +135,7 @@ namespace RealEstateApp.WebUI.Controllers
 
             if (ModelState.IsValid)
             {
-                await _houseRepositroy.AddAsync(house);
+                await _houseRepository.AddAsync(house);
                 return RedirectToAction(nameof(Index));
             }
           
@@ -218,7 +146,7 @@ namespace RealEstateApp.WebUI.Controllers
         [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Edit(int? id)
         {
-            var house = await _houseRepositroy.GetAllWitAsQuery()
+            var house = await _houseRepository.GetAllWitAsQuery()
                         .FirstOrDefaultAsync(x => x.Id == id);
            
 
@@ -239,9 +167,8 @@ namespace RealEstateApp.WebUI.Controllers
           
             if (ModelState.IsValid)
             {
-                
-                //var existingHouse = await _context.Houses.FindAsync(vm.Id);
-                var existingHouse = await _houseRepositroy.GetByIdAsync(vm.Id);
+                                
+                var existingHouse = await _houseRepository.GetByIdAsync(vm.Id);
 
                 existingHouse.UpdateDetails(vm.Title, vm.Price, vm.EmployeeId);
                 existingHouse.SetDescription(vm.Description);
@@ -259,13 +186,12 @@ namespace RealEstateApp.WebUI.Controllers
                 existingHouse.SetImageUrl(vm.ImageUrl);
                 existingHouse.ListingStatus(vm.IsRental);
 
-               _houseRepositroy.SaveChanges();
+               _houseRepository.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(vm);
         }
 
-        // GET: Houses/Delete/5
         [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -274,7 +200,7 @@ namespace RealEstateApp.WebUI.Controllers
                 return NotFound();
             }
 
-            var house = await _houseRepositroy
+            var house = await _houseRepository
                 .GetAllWitAsQuery()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (house == null)
@@ -290,13 +216,13 @@ namespace RealEstateApp.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var house = await _houseRepositroy.GetByIdAsync(id);
+            var house = await _houseRepository.GetByIdAsync(id);
             if (house != null)
             {
-                _houseRepositroy.Remove(house);
+                _houseRepository.Remove(house);
             }
 
-            _houseRepositroy.SaveChanges();
+            _houseRepository.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
        

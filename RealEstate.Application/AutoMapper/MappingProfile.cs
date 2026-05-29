@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RealEstate.Application.ViewModel;
+using RealEstate.Application.ViewModel.Houses;
 using RealEstate.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealEstate.Application.Mappings
+namespace RealEstate.Application.AutoMapper
 {
     public class MappingProfile : Profile
     {
@@ -30,6 +30,7 @@ namespace RealEstate.Application.Mappings
             // Not: Title, Price, Description gibi isimleri aynı olan alanları 
             // AutoMapper zaten otomatik olarak eşler, onları tek tek yazmana gerek yok.
 
+            
 
         }
     }

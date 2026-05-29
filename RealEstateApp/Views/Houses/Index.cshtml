@@ -1,701 +1,472 @@
 ﻿@using System.Security.Claims
 @using RealEstate.Core.Models.Enums
-@model RealEstate.Application.ViewModel.HouseVMSort
+@model RealEstate.Application.ViewModel.Houses.HouseVMSort
 
 @{
-    ViewData["Title"] = "Giriş";
-    Layout = null;
-    string filter = "";
+	ViewData["Title"] = "Giriş";
+	Layout = null;
+	string filter = "";
 }
 
 
 <!DOCTYPE html>
 
-<html class="dark" lang="tr"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary-container": "#002d5a",
-              "surface-variant": "#424751",
-              "on-tertiary-container": "#ffa884",
-              "on-error": "#ffffff",
-              "primary": "#abc7ff",
-              "on-error-container": "#ffdad6",
-              "inverse-primary": "#00346f",
-              "tertiary-fixed": "#ffdbce",
-              "on-primary-fixed": "#001b3f",
-              "on-surface": "#e1e2e5",
-              "secondary-container": "#fd702d",
-              "surface-container-highest": "#333539",
-              "tertiary-fixed-dim": "#ffb598",
-              "on-tertiary": "#ffffff",
-              "on-surface-variant": "#c2c6d3",
-              "surface-dim": "#111416",
-              "surface-container-high": "#282a2d",
-              "on-secondary": "#ffffff",
-              "inverse-on-surface": "#191c1e",
-              "on-primary-fixed-variant": "#00458f",
-              "surface-bright": "#373a3e",
-              "primary-fixed-dim": "#abc7ff",
-              "surface-tint": "#abc7ff",
-              "secondary-fixed": "#ffdbce",
-              "on-primary": "#002f65",
-              "secondary": "#ffb598",
-              "error-container": "#93000a",
-              "surface": "#111416",
-              "tertiary": "#ffb598",
-              "background": "#0b0e11",
-              "surface-container": "#1d2023",
-              "surface-container-low": "#191c1e",
-              "tertiary-container": "#873000",
-              "on-secondary-fixed-variant": "#7e2c00",
-              "on-tertiary-fixed": "#370f00",
-              "on-tertiary-fixed-variant": "#7e2c00",
-              "on-primary-container": "#d7e2ff",
-              "error": "#ffb4ab",
-              "secondary-fixed-dim": "#ffb598",
-              "on-background": "#e1e2e5",
-              "outline": "#8c919d",
-              "primary-fixed": "#d7e2ff",
-              "outline-variant": "#424751",
-              "on-secondary-fixed": "#370f00",
-              "surface-container-lowest": "#0c0f12",
-              "inverse-surface": "#e1e2e5",
-              "on-secondary-container": "#ffdbce"
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-          },
-        },
-      }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: #0b0e11; }
-        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
-        .dark nav { background-color: rgba(11, 14, 17, 0.8) !important; }
-    </style>
+<html class="dark" lang="tr">
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+	<script id="tailwind-config">
+		tailwind.config = {
+		darkMode: "class",
+		theme: {
+		extend: {
+		colors: {
+		"primary-container": "#002d5a",
+		"surface-variant": "#424751",
+		"on-tertiary-container": "#ffa884",
+		"on-error": "#ffffff",
+		"primary": "#abc7ff",
+		"on-error-container": "#ffdad6",
+		"inverse-primary": "#00346f",
+		"tertiary-fixed": "#ffdbce",
+		"on-primary-fixed": "#001b3f",
+		"on-surface": "#e1e2e5",
+		"secondary-container": "#fd702d",
+		"surface-container-highest": "#333539",
+		"tertiary-fixed-dim": "#ffb598",
+		"on-tertiary": "#ffffff",
+		"on-surface-variant": "#c2c6d3",
+		"surface-dim": "#111416",
+		"surface-container-high": "#282a2d",
+		"on-secondary": "#ffffff",
+		"inverse-on-surface": "#191c1e",
+		"on-primary-fixed-variant": "#00458f",
+		"surface-bright": "#373a3e",
+		"primary-fixed-dim": "#abc7ff",
+		"surface-tint": "#abc7ff",
+		"secondary-fixed": "#ffdbce",
+		"on-primary": "#002f65",
+		"secondary": "#ffb598",
+		"error-container": "#93000a",
+		"surface": "#111416",
+		"tertiary": "#ffb598",
+		"background": "#0b0e11",
+		"surface-container": "#1d2023",
+		"surface-container-low": "#191c1e",
+		"tertiary-container": "#873000",
+		"on-secondary-fixed-variant": "#7e2c00",
+		"on-tertiary-fixed": "#370f00",
+		"on-tertiary-fixed-variant": "#7e2c00",
+		"on-primary-container": "#d7e2ff",
+		"error": "#ffb4ab",
+		"secondary-fixed-dim": "#ffb598",
+		"on-background": "#e1e2e5",
+		"outline": "#8c919d",
+		"primary-fixed": "#d7e2ff",
+		"outline-variant": "#424751",
+		"on-secondary-fixed": "#370f00",
+		"surface-container-lowest": "#0c0f12",
+		"inverse-surface": "#e1e2e5",
+		"on-secondary-container": "#ffdbce"
+		},
+		fontFamily: {
+		"headline": ["Manrope"],
+		"body": ["Inter"],
+		"label": ["Inter"]
+		},
+		borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+		},
+		},
+		}
+	</script>
+	<style>
+		.material-symbols-outlined {
+		font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+		}
+
+		body {
+		font-family: 'Inter', sans-serif;
+		background-color: #0b0e11;
+		}
+
+		h1, h2, h3, h4 {
+		font-family: 'Manrope', sans-serif;
+		}
+
+		.dark nav {
+		background-color: rgba(11, 14, 17, 0.8) !important;
+		}
+	</style>
 </head>
 <body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container dark">
-<!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 backdrop-blur-xl shadow-[0px_12px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
-<div class="flex justify-between items-center px-8 py-4 max-w-[1280px] mx-auto">
-<div class="text-2xl font-extrabold text-primary tracking-tighter">
-    <a style="margin-right: 10px; asp-controller="Houses" asp-action="Index">Real Estate</a>
-                @if (User.IsInRole("Agent"))
-                    {
-                        <a asp-controller="Houses" asp-action="Create"> Ev İlanı oluştur </a>                      
-                    }                    
+	<!-- TopNavBar -->
+	<nav class="fixed top-0 w-full z-50 backdrop-blur-xl shadow-[0px_12px_32px_rgba(0,0,0,0.4)] transition-all duration-300">
+		<div class="flex justify-between items-center px-8 py-4 max-w-[1280px] mx-auto">
+			<div class="text-2xl font-extrabold text-primary tracking-tighter">
+				<a style="margin-right: 10px; asp-controller="Houses" asp-action="Index">Real Estate</a>
+				@if (User.IsInRole("Agent"))
+				{
+					<a asp-controller="Houses" asp-action="Create"> Ev İlanı oluştur </a>
+				}
 
 
-    </div>
-<div class="hidden md:flex items-center gap-8 font-['Manrope'] font-medium tracking-tight">
-
-</div>
-<div class="flex items-center gap-6">
-<div class="flex items-center gap-4 text-on-surface-variant">
-<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">
-                            @if (User.IsInRole("Agent"))
-                            {
-                                <a asp-controller="Account" asp-action="Profile">account_circle</a>                
-                            }
-                        </span>
-</div>
- @if(User.IsInRole("Agent"))
- {
- <button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">
-       
-      <a asp-controller="Account" asp-action="Logout" asp->@User.Identity.Name</a>                          
-    
-                    </button>
- }
- 
-</div>
-</div>
-</nav>
-<main class="pt-24">
-<!-- Hero Section -->
-<section class="px-8 pb-8 pt-6">
-    <div class="relative h-[280px] rounded-[2rem] overflow-hidden flex items-center justify-center text-center">
-        
-        <div class="absolute inset-0 bg-gradient-to-br from-primary-container to-background opacity-90"></div>
-        <img alt="" class="absolute inset-0 w-full h-full object-cover -z-10" data-alt="Luxury modern estate pool and exterior view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgqXuK3qp2AhLFbkGnNF9_r8Usnchui5bY6vtwkzbrBs5Wmn8YRX2qI5tvnqT5WQLuEciX7ezZiWmdmWifRSYFjALU3BwJ7dqQYRyJbo6xNBNI_q4PPb-UV-FK8tJsrZsIBbttY-cjPAobcqWnOrqBTGlk7IPAx4osU433HEOfkiijeNDr0jFVj8L2DybDrMMEdHIrmXBsjGABoFyrg-NPLkHHmcUI8_fm_0V56jyTg6NlLodO8KgVWg_7_nv0G1fUTEkAXdkD0Ws"/>
-        
-        <div class="relative z-10 max-w-3xl px-6">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-5 tracking-tighter">Hayalindeki Evi Bul</h1>
-            
-                  <form asp-controller="Houses" asp-action="Index" method="get" >
-            <div class="bg-surface-container-lowest p-2 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2">
-                <div class="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl">
-                    <span class="material-symbols-outlined text-outline">search</span>
-                        <input asp-for="SearchText"
-                        form="filterForm"
-                        class="bg-transparent border-none focus:ring-0 w-full py-3 text-on-surface placeholder:text-outline" 
-                        placeholder="Şehir, semt veya ilan başlığı ara..." type="text"/>
-                    </div>
-
-                <button type="submit"
-                    form="filterForm"
-                    class="bg-secondary-container text-white px-8 py-3 rounded-xl font-bold active:scale-95 transition-transform">
-                    İlanları Keşfet
-                </button>
-            </div>
-            </form>
-        </div>
-    </div>
-</section>
-<!-- Main Content Area -->
-<div class="max-w-[1920px] mx-auto px-8 flex flex-col lg:flex-row gap-8 pb-24">
-<!-- Sidebar Filters -->
-<aside class="w-full lg:w-80 shrink-0">
-<div class="bg-surface-container rounded-3xl p-8 sticky top-28">
-<h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
-<span class="material-symbols-outlined">tune</span>
-                    Filtrele
-                </h2>
-
-<!-- Property Status --> 
-
-@* Form Başlangıcı *@
-
-<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="space-y-4" id="filterForm" >
-<!-- Price Range -->
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
-<div class="grid grid-cols-2 gap-2">
-<input asp-for="minPrice" 
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
-placeholder="Min" 
-type="number"/>
-<input asp-for="maxPrice" 
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
-placeholder="Max" 
-type="number"/>
-</div>
-</div>
-<!-- City Select -->
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Şehir</span>
-<select asp-for="City"
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
-  @{
-     // List<string> list = new List<string>();
-     <option hidden></option>
-     foreach (var item in Model.AvailableCities)                                                                                 
-   {
-      // var city = item.Address?.City;
-      // if(!String.IsNullOrEmpty(city))
-      // {
-      //  if(!list.Contains(city))
-      //   {
-      //  list.Add(city);
-      //   }
-      // }
-      <option>@item</option>
-   }                                      
-  }
-                                                
-</select>
-</div>
-<!-- Rooms & Bathrooms -->
-<div class="grid grid-cols-2 gap-4">
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Oda</span>
-<select asp-for="numberOfRooms"  @* asp-items="Html.GetEnumSelectList<Enum_NumberOfRooms>()" *@
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
- @*  @{
-        var list = Model.Houses.Select(s => s.NumberOfRooms).Distinct().ToList(); 
-@foreach (var item in list)
-{
-    <option>@Html.DisplayFor(modelItem => item)</option>
-}
-} *@
-        <option hidden></option>
-@foreach (var item in Model.AvailableRooms)
-                                                    {
-                                                        <option value="@item">@Html.DisplayFor(x=> item)</option>
-                                                    }
-
-</select>
-</div>
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"> Banyo</span>
-<select asp-for="NumberOfBathrooms" 
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
-<option hidden></option>
-@foreach (var item in Model.AvailableBathrooms)
- {
-    <option>@item</option>
- }
-</select>
-</div>
-</div>
-<!-- Size -->
-<div>
-<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Metrekare (m²)</span>
-<div class="flex items-center gap-2">
-<input asp-for = "minArea"
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
-placeholder="Min" 
-type="number"/>
-<span class="text-outline">-</span>
-<input asp-for="maxArea"
-class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface" 
-placeholder="Max" 
-type="number"/>
-</div>
-</div>
-<button type= "submit"
-    class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
-                        Sonuçları Uygula
-                    </button>
-                    </form>
-
-                            @if (Model.isFiltered)
-                    {
-<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="mt-4">
-
-                        <button type= "submit"
-                        class="w-full bg-secondary text-on-primary py-4 rounded font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
-                            Filtreyi temizle
-                        </button>  
-                    </form>
-                    }
-</div>
-
-                </aside>
-
-
-
-<!-- Listings Grid -->
-
-<section class="flex-1">
-<div id="ilanlar"class="flex justify-between items-end mb-8">
-<div>
-<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.Houses.Count ilan bulundu</h2>
-</div>
-<div class="flex items-center gap-3">
-    <span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
-    
-    <form asp-controller="Houses" asp-action="Index" asp-fragment="ilanlar" method="get">
-        
-        <select asp-for="sortOrder" 
-        form="filterForm" 
-        onchange="document.getElementById('filterForm').submit();"
-        class="bg-black border-none font-bold text-primary focus:ring-0 cursor-pointer">
-    
-        <option hidden value="">Seçiniz...</option>
-        <option value="date_asc">En Yeni İlanlar</option>
-        <option value="price_asc">Fiyat (Artan)</option>
-        <option value="price_desc">Fiyat (Azalan)</option>
-    
-        </select>
-
-    </form>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-    @foreach (var item in Model.Houses)
-    {
-                            
-                                string ListingStatusName = "";
-                                if (item.IsRental) ListingStatusName = "Kiralık";
-                                else ListingStatusName = "Satılık";
-                            
-     <a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
-        
-         <div class="group bg-surface-container-lowest rounded-3xl 
-            overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)] 
-            transition-all duration-500"            
-            style="cursor:pointer" >
-            <div class="relative aspect-[4/3] overflow-hidden">
-               
-                @if(User.IsInRole("Agent")) {
-                   filter = "grayscale(100%)";
-                    
-                                    @if(item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
-                                    {
-                                        filter = "";
-                                    }
-                }   
-                <img alt="@item.Description" 
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
-                src="@(item.ImageUrl ?? "https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg" )" style="filter:@filter"/>
-                
-                
-                @if (item.IsAvailable)
-                {
-                    string color = "secondary-container";
-                    if (item.IsRental) color = "black";
-
-                                                <span class="absolute top-4 left-4 bg-@color
-                    text-white px-4 py-1.5 rounded-full 
-                    text-xs font-bold uppercase tracking-widest">
-                                                    @ListingStatusName
-                                                </span>
-                }    
-                                        </div>
-            
-            <div class="p-6">
-                <div class="flex justify-between items-start mb-2">
-                <h2 class="text-xl font-bold text-primary leading-tight line-clamp-1">@item.Title</h2>
-                 
-                </div>
-                <div class="flex justify-between items-start mb-2">
-                    <h5 class="text font-bold text-primary leading-tight line-clamp-1">
-                                                        @{
-                                                            string myText = "";
-
-                                                            if (@item.Description.Length >= 12)
-                                                                myText = item.Description.Substring(0, 10) + "...";
-                                                            else
-                                                                myText = item.Description;
-                                                        }
-                                                        @myText
-                                                        
-                    </h5>
-                    <span class="text-xl font-extrabold text-primary">
-                        @item.Price.ToString("N0") ₺
-                    </span>
-                </div>
-
-                <div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
-                    <span class="material-symbols-outlined text-[18px]">location_on</span>
-                    @item.Address?.City, @item.Address?.District
-                </div>
-
-                <div class="flex items-center justify-between pt-4 border-t border-outline-variant">
-                    <div class="flex items-center gap-2">
-                        
-                        <span class="material-symbols-outlined text-outline">bed</span>
-                        <span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-outline">bathtub</span>
-                        <span class="text-sm font-bold text-on-surface">@item.NumberOfBathrooms</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="material-symbols-outlined text-outline">square_foot</span>
-                        <span class="text-sm font-bold text-on-surface">@item.Area m²</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-</a> 
-    }
-</div>
-
-
-
-<!-- Pagination -->
-@* <div class="mt-16 flex justify-center items-center gap-4">
-<button class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
-<span class="material-symbols-outlined">chevron_left</span>
-</button>
-<button class="w-12 h-12 rounded-xl bg-primary text-on-primary font-bold">1</button>
-<button class="w-12 h-12 rounded-xl bg-surface-container-lowest text-on-surface-variant font-bold hover:bg-surface-container-high transition-colors">2</button>
-<button class="w-12 h-12 rounded-xl bg-surface-container-lowest text-on-surface-variant font-bold hover:bg-surface-container-high transition-colors">3</button>
-<button class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-</div> *@
-</section>
-</div>
-</main>
-<!-- Footer -->
-<footer class="w-full py-12 px-8 bg-surface-container border-t border-outline-variant/15">
-<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1920px] mx-auto">
-<div class="text-xl font-bold text-primary">The Curated Estate</div>
-<div class="flex flex-wrap justify-center gap-8 font-['Inter'] text-sm uppercase tracking-widest">
-</div>
-<div class="text-on-surface-variant text-xs opacity-70">
-            © 2024 The Curated Estate. High-End Editorial Real Estate.
-        </div>
-</div>
-</footer>
-</body></html>
-
-
-
-
-@*     
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfRooms)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfBathrooms)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Area)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ListingDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAvailable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContactNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfRooms)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfBathrooms)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Area)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ListingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContactNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table> *@
-@* <table class="table table-hover align-middle">
-	<thead class="table-dark">
-		<tr>
-			<th>@Html.DisplayNameFor(model => model.Title)</th>
-			<th>@Html.DisplayNameFor(model => model.NumberOfRooms)</th>
-			<th>@Html.DisplayNameFor(model => model.NumberOfBathrooms)</th>
-			<th class="text-center">@Html.DisplayNameFor(model => model.Area)</th>
-			<th class="text-center">@Html.DisplayNameFor(model => model.Price)</th>
-			<th class="text-center">@Html.DisplayNameFor(model => model.IsAvailable)</th>
-            <th class="text-center">@Html.DisplayNameFor(model => model.Address.City)</th>
-            <th class="text-center">@Html.DisplayNameFor(model => model.Address.District)</th>
-            
-			@{				
-					<th>İşlemler</th>
-			}
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td class="fw-bold">
-					@item.Title
-					<br />
-					<small class="text-muted fw-normal">@item.ContactNumber</small>
-				</td>
-				<td>
-					<span class="badge bg-primary text-dark">
-						@Html.DisplayFor(modelItem => item.NumberOfRooms) Oda
-
-					</span>
-				</td>
-				<td>
-					<span class="badge bg-info text-dark">
-						@Html.DisplayFor(modelItem => item.NumberOfBathrooms) Banyo
-					</span>
-				</td>
-				<td class="text-center">@item.Area m²</td>
-				<td class="text-end fw-bold">
-					@item.Price.ToString("N0") ₺
-				</td>
-				<td class="text-center">
-					@if (item.IsAvailable)
-					{
-						<span class="badge rounded-pill bg-success text-center">
-							Aktif
-						</span>
-					}
-					else
-					{
-						<span class="badge rounded-pill bg-danger text-center">
-							Pasif
-						</span>
-					}
-				</td>
-                <td class="text-center">
-                         @item.Address?.City 
-                        @Html.DisplayFor(modelItem => item.Address.City)
-                @* </td>
-                <td class="text-center">
-                    @* @item.Address?.District 
-                    @Html.DisplayFor(modelItem => item.Address.District)
-                </td>
-				<td>
-					@{
-						var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-						if (item.Employee != null && item.Employee.Auth0Sub == employeeId)
+			</div>
+			<div class="hidden md:flex items-center gap-8 font-['Manrope'] font-medium tracking-tight">
+			</div>
+			<div class="flex items-center gap-6">
+				<div class="flex items-center gap-4 text-on-surface-variant">
+					<span class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-all duration-300">
+						@if (User.IsInRole("Agent"))
 						{
+							<a asp-controller="Account" asp-action="Profile">account_circle</a>
+						}
+					</span>
+				</div>
+				@if (User.IsInRole("Agent"))
+				{
+					<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-medium active:scale-95 transition-transform hover:opacity-90">
 
-							<div class="btn-group btn-group-sm" role="group">
-							<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Düzenle</a>
-								<div class="btn-group btn-group-sm" role="group">
-									<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a>
+						<a asp-controller="Account" asp-action="Logout" asp->@User.Identity.Name</a>
+
+					</button>
+				}
+
+			</div>
+		</div>
+	</nav>
+	<main class="pt-24">
+		<!-- Hero Section -->
+		<section class="px-8 pb-8 pt-6">
+			<div class="relative h-[280px] rounded-[2rem] overflow-hidden flex items-center justify-center text-center">
+
+				<div class="absolute inset-0 bg-gradient-to-br from-primary-container to-background opacity-90"></div>
+				<img alt="" class="absolute inset-0 w-full h-full object-cover -z-10" data-alt="Luxury modern estate pool and exterior view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgqXuK3qp2AhLFbkGnNF9_r8Usnchui5bY6vtwkzbrBs5Wmn8YRX2qI5tvnqT5WQLuEciX7ezZiWmdmWifRSYFjALU3BwJ7dqQYRyJbo6xNBNI_q4PPb-UV-FK8tJsrZsIBbttY-cjPAobcqWnOrqBTGlk7IPAx4osU433HEOfkiijeNDr0jFVj8L2DybDrMMEdHIrmXBsjGABoFyrg-NPLkHHmcUI8_fm_0V56jyTg6NlLodO8KgVWg_7_nv0G1fUTEkAXdkD0Ws" />
+
+				<div class="relative z-10 max-w-3xl px-6">
+					<h1 class="text-4xl md:text-5xl font-extrabold text-white mb-5 tracking-tighter">Hayalindeki Evi Bul</h1>
+
+					<form asp-controller="Houses" asp-action="Index" method="get">
+						<div class="bg-surface-container-lowest p-2 rounded-2xl shadow-2xl flex flex-col md:flex-row gap-2">
+							<div class="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl">
+								<span class="material-symbols-outlined text-outline">search</span>
+								<input asp-for="SearchText"
+									   form="filterForm"
+									   class="bg-transparent border-none focus:ring-0 w-full py-3 text-on-surface placeholder:text-outline"
+									   placeholder="Şehir, semt veya ilan başlığı ara..." type="text" />
+							</div>
+
+							<button type="submit"
+									form="filterForm"
+									class="bg-secondary-container text-white px-8 py-3 rounded-xl font-bold active:scale-95 transition-transform">
+								İlanları Keşfet
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content Area -->
+		<div class="max-w-[1920px] mx-auto px-8 flex flex-col lg:flex-row gap-8 pb-24">
+			<!-- Sidebar Filters -->
+			<aside class="w-full lg:w-80 shrink-0">
+				<div class="bg-surface-container rounded-3xl p-8 sticky top-28">
+					<h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+						<span class="material-symbols-outlined">tune</span>
+						Filtrele
+					</h2>
+
+					<!-- Property Status -->
+					@* Form Başlangıcı *@
+
+					<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="space-y-4" id="filterForm">
+						
+						@* Formun içine bu hidden input'u ekle *@
+						<input type="hidden" name="Page" id="pageInput" value="@Model.Page" />
+						
+						<!-- Price Range -->
+						<div>
+							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
+							<div class="grid grid-cols-2 gap-2">
+								<input asp-for="minPrice"
+									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+									   placeholder="Min"
+									   type="number" />
+								<input asp-for="maxPrice"
+									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+									   placeholder="Max"
+									   type="number" />
+							</div>
+						</div>
+						<!-- City Select -->
+						<div>
+							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Şehir</span>
+							<select asp-for="City"
+									class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
+								@{
+									// List<string> list = new List<string>();
+									<option hidden></option>
+									foreach (var item in Model.AvailableCities)
+									{
+										// var city = item.Address?.City;
+										// if(!String.IsNullOrEmpty(city))
+										// {
+										//  if(!list.Contains(city))
+										//   {
+										//  list.Add(city);
+										//   }
+										// }
+										<option>@item</option>
+									}
+								}
+
+							</select>
+						</div>
+						<!-- Rooms & Bathrooms -->
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Oda</span>
+								<select asp-for="numberOfRooms"
+										class="w-full bg-surface-container-lowest
+									border-none rounded-lg text-sm focus:ring-1
+									focus:ring-primary text-on-surface">
+
+									<option hidden></option>
+									@foreach (var item in Model.AvailableRooms)
+									{
+										<option value="@item">@Html.DisplayFor(x => item)</option>
+									}
+
+								</select>
+							</div>
+							<div>
+								<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"> Banyo</span>
+								<select asp-for="NumberOfBathrooms"
+										class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+									<option hidden></option>
+									@foreach (var item in Model.AvailableBathrooms)
+									{
+										<option>@item</option>
+									}
+								</select>
+							</div>
+						</div>
+						<!-- Size -->
+						<div>
+							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Metrekare (m²)</span>
+							<div class="flex items-center gap-2">
+								<input asp-for="minArea"
+									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+									   placeholder="Min"
+									   type="number" />
+								<span class="text-outline">-</span>
+								<input asp-for="maxArea"
+									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+									   placeholder="Max"
+									   type="number" />
+							</div>
+						</div>
+						<button type="submit"
+								class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+							Sonuçları Uygula
+						</button>
+					</form>
+
+					@if (Model.isFiltered)
+					{
+						<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="mt-4">
+
+							<button type="submit"
+									class="w-full bg-secondary text-on-primary py-4 rounded font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+								Filtreyi temizle
+							</button>
+						</form>
+					}
+				</div>
+
+			</aside>
+
+
+
+			<!-- Listings Grid -->
+
+			<section class="flex-1">
+				<div id="ilanlar" class="flex justify-between items-end mb-8">
+					<div>
+						<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.TotalCount ilan bulundu</h2>
+					</div>
+					<div class="flex items-center gap-3">
+						<span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
+
+						<form asp-controller="Houses" asp-action="Index" asp-fragment="ilanlar" method="get">
+
+							<select asp-for="sortOrder"
+									form="filterForm"
+									onchange="document.getElementById('filterForm').submit();"
+									class="bg-black border-none font-bold text-primary focus:ring-0 cursor-pointer">
+
+								<option hidden value="">Seçiniz...</option>
+								<option value="date_asc">En Yeni İlanlar</option>
+								<option value="price_asc">Fiyat (Artan)</option>
+								<option value="price_desc">Fiyat (Azalan)</option>
+
+							</select>
+
+						</form>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+					@foreach (var item in Model.Houses)
+					{
+
+						string ListingStatusName = "";
+						if (item.IsRental) ListingStatusName = "Kiralık";
+						else ListingStatusName = "Satılık";
+
+						<a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
+
+							<div class="group bg-surface-container-lowest rounded-3xl
+								overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)]
+								transition-all duration-500"
+								 style="cursor:pointer">
+								<div class="relative aspect-[4/3] overflow-hidden">
+
+									@if (User.IsInRole("Agent"))
+									{
+										filter = "grayscale(100%)";
+
+										@if (item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
+										{
+											filter = "";
+										}
+									}
+									<img alt="@item.Description"
+										 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+										 src="@(item.ImageUrl ?? "https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg")" style="filter:@filter" />
+
+                
+									@if (item.IsAvailable)
+									{
+										string color = "secondary-container";
+										if (item.IsRental) color = "black";
+
+										<span class="absolute top-4 left-4 bg-@color
+											text-white px-4 py-1.5 rounded-full
+											text-xs font-bold uppercase tracking-widest">
+											@ListingStatusName
+										</span>
+									}
 								</div>
-								<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Sil</a>
-							</div>
-						}
-						else 
-						{
-							<div class="btn-group btn-group-sm" role="group">
-								<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-secondary">Detay</a>
-							</div>
-						}
 
+								<div class="p-6">
+									<div class="flex justify-between items-start mb-2">
+										<h2 class="text-xl font-bold text-primary leading-tight line-clamp-1">@item.Title</h2>
+
+									</div>
+									<div class="flex justify-between items-start mb-2">
+										<h5 class="text font-bold text-primary leading-tight line-clamp-1">
+											@{
+												string myText = "";
+
+												if (@item.Description.Length >= 12)
+													myText = item.Description.Substring(0, 10) + "...";
+												else
+													myText = item.Description;
+											}
+											@myText
+
+										</h5>
+										<span class="text-xl font-extrabold text-primary">
+											@item.Price.ToString("N0") ₺
+										</span>
+									</div>
+
+									<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+										<span class="material-symbols-outlined text-[18px]">location_on</span>
+										@item.Address?.City, @item.Address?.District
+									</div>
+
+									<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+										<div class="flex items-center gap-2">
+
+											<span class="material-symbols-outlined text-outline">bed</span>
+											<span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
+										</div>
+										<div class="flex items-center gap-2">
+											<span class="material-symbols-outlined text-outline">bathtub</span>
+											<span class="text-sm font-bold text-on-surface">@item.NumberOfBathrooms</span>
+										</div>
+										<div class="flex items-center gap-2">
+											<span class="material-symbols-outlined text-outline">square_foot</span>
+											<span class="text-sm font-bold text-on-surface">@item.Area m²</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
 					}
-				</td>
-                
-			</tr>
-		}
-	</tbody>
-</table> 
- *@
-@*
+				</div>
 
-	<div class="table-responsive rounded-3 overflow-hidden shadow-sm" style="border:1px solid #2e3138;">
-  <table class="table table-hover align-middle mb-0" style="background:#1e2126;font-size:13px;">
 
-    <thead style="background:#16181d;border-bottom:1px solid #2e3138;">
-      <tr>
-        <th class="px-4 py-3 fw-medium text-secondary" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.Title)</th>
-        <th class="px-3 py-3 fw-medium text-secondary" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.NumberOfRooms)</th>
-        <th class="px-3 py-3 fw-medium text-secondary" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.NumberOfBathrooms)</th>
-        <th class="px-3 py-3 fw-medium text-secondary text-center" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.Area)</th>
-        <th class="px-3 py-3 fw-medium text-secondary text-end" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.Price)</th>
-        <th class="px-3 py-3 fw-medium text-secondary text-center" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">@Html.DisplayNameFor(model => model.IsAvailable)</th>
-        <th class="px-4 py-3 fw-medium text-secondary text-end" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:none;">İşlemler</th>
-      </tr>
-    </thead>
 
-    <tbody>
-      @foreach (var item in Model)
-      {
-        <tr style="border-color:#2e3138;">
-          <td class="px-4 py-3" style="border-color:#2e3138;">
-            <span class="fw-semibold" style="color:#f1f3f5;">@item.Title</span>
-            <br />
-            <small class="text-secondary" style="font-size:11px;">@item.ContactNumber</small>
-          </td>
+				<!-- Pagination -->
+				@* Pagination kısmı formun dışında olabilir *@
+				<div class="mt-16 flex justify-center items-center gap-4">
+					
+					@* Sol ok *@
+					@if (Model.Page > 0)
+					{
+						<button type="button" onclick="goToPage(@(Model.Page - 1))"
+								class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+							<span class="material-symbols-outlined">chevron_left</span>
+						</button>
+					}
 
-          <td class="px-3 py-3" style="border-color:#2e3138;">
-            <span class="badge rounded-pill" style="font-size:11px;background:#1a2a3a;color:#66aadd;border:1px solid #2d4d6a;">
-              @Html.DisplayFor(modelItem => item.NumberOfRooms) Oda
-            </span>
-          </td>
+					@* Sayfa butonları *@
+					@for (int i = 0; i < Model.TotalPages; i++)
+					{
+						<button type="button" onclick="goToPage(@i)"
+								class="w-12 h-12 rounded-xl font-bold @(Model.Page == i ? "bg-primary text-on-primary" : "bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high transition-colors")">
+							@(i + 1)
+						</button>
+					}
 
-          <td class="px-3 py-3" style="border-color:#2e3138;">
-            <span class="badge rounded-pill" style="font-size:11px;background:#1a2e2a;color:#4dbb9a;border:1px solid #2d5e4e;">
-              @Html.DisplayFor(modelItem => item.NumberOfBathrooms) Banyo
-            </span>
-          </td>
+					@* Sağ ok *@
+					@if (Model.Page < Model.TotalPages - 1)
+					{
+						<button type="button" onclick="goToPage(@(Model.Page + 1))"
+								class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+							<span class="material-symbols-outlined">chevron_right</span>
+						</button>
+					}
 
-          <td class="px-3 py-3 text-center" style="color:#9aa0a8;border-color:#2e3138;">
-            @item.Area <span class="text-secondary">m²</span>
-          </td>
+				</div>
 
-          <td class="px-3 py-3 text-end fw-semibold" style="color:#4dbb7a;border-color:#2e3138;">
-            @item.Price.ToString("N0") ₺
-          </td>
+				<script>
+					function goToPage(pageNumber) {
+					document.getElementById('pageInput').value = pageNumber;
+					document.getElementById('filterForm').submit();
+					}
+				</script>
+			</section>
+		</div>
+	</main>
+	<!-- Footer -->
+	<footer class="w-full py-12 px-8 bg-surface-container border-t border-outline-variant/15">
+		<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1920px] mx-auto">
+			<div class="text-xl font-bold text-primary">The Curated Estate</div>
+			<div class="flex flex-wrap justify-center gap-8 font-['Inter'] text-sm uppercase tracking-widest">
+			</div>
+			<div class="text-on-surface-variant text-xs opacity-70">
+				© 2024 The Curated Estate. High-End Editorial Real Estate.
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
 
-          <td class="px-3 py-3 text-center" style="border-color:#2e3138;">
-            @if (item.IsAvailable)
-            {
-              <span class="badge rounded-pill" style="font-size:11px;background:#1a3a28;color:#4dbb7a;border:1px solid #2d6644;">✓ Aktif</span>
-            }
-            else
-            {
-              <span class="badge rounded-pill" style="font-size:11px;background:#3a1a1a;color:#cc6666;border:1px solid #662d2d;">✗ Pasif</span>
-            }
-          </td>
 
-          <td class="px-4 py-3 text-end" style="border-color:#2e3138;">
-            @{
-              var employeeId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-              if (item.Employee != null && item.Employee.Auth0Sub == employeeId)
-              {
-                <div class="d-flex justify-content-end gap-1">
-                  <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size:11px;">Detay</a>
-                  <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary px-2 py-1" style="font-size:11px;">Düzenle</a>
-                  <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger px-2 py-1" style="font-size:11px;">Sil</a>
-                </div>
-              }
-              else
-              {
-                <div class="d-flex justify-content-end">
-                  <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary px-2 py-1" style="font-size:11px;">Detay</a>
-                </div>
-              }
-            }
-          </td>
-        </tr>
-      }
-    </tbody>
 
-  </table>
-</div>
 
-*@
-@* <h1>Giriş</h1>
-@{
-	if (User.Identity.IsAuthenticated)
-	{
-		<p>
-			<a asp-action="Create">Yeni ilan oluştur..</a>
-		</p>
-	}
-   
-} *@

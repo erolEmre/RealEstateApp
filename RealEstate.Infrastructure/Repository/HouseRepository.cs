@@ -1,5 +1,4 @@
-﻿using RealEstate.Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RealEstate.Infrastructure.Context;
 using RealEstate.Core.Models;
 using System;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using RealEstate.Core.Models.Enums;
+using RealEstate.Core.Interfaces.Houses.HouseRepository;
 
 namespace RealEstate.Infrastructure.Repository
 {
@@ -22,7 +22,7 @@ namespace RealEstate.Infrastructure.Repository
         public async Task AddAsync(House house)
         {
             await _context.Houses.AddAsync(house);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         public async Task UpdateAsync(House house)
         {
@@ -35,7 +35,7 @@ namespace RealEstate.Infrastructure.Repository
         }
         public async Task<List<House>> GetAllAsync()
         {
-            return _context.Houses.ToList();
+            return await _context.Houses.ToListAsync();
         }
 
         public async Task<House?> GetByIdAsync(int id)
@@ -50,10 +50,10 @@ namespace RealEstate.Infrastructure.Repository
             {
                 h.MarkAsUnavailable();
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async void SaveChanges()
+        public void SaveChanges()
         {
              _context.SaveChanges();
         }

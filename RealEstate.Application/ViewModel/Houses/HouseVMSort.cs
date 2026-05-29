@@ -1,7 +1,7 @@
 ﻿using RealEstate.Core.Models;
 using RealEstate.Core.Models.Enums;
 
-namespace RealEstate.Application.ViewModel
+namespace RealEstate.Application.ViewModel.Houses
 {
     public class HouseVMSort
     {
@@ -29,7 +29,10 @@ namespace RealEstate.Application.ViewModel
         public List<string> AvailableCities { get; set; } = new List<string>();
         public List<int> AvailableBathrooms { get; set; } = new List<int>();
         public List<Enum_NumberOfRooms> AvailableRooms { get; set; } = new List<Enum_NumberOfRooms>();
-
+        public int Page { set; get; } = 0;
+        public int Count { get; set; } = 6;
+        public int TotalPages { get; set; }
+        public int TotalCount{ get; set; }
     }
 
 }

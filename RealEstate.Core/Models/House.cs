@@ -50,7 +50,7 @@ namespace RealEstate.Core.Models
         }
         public int Id { get; private set; }
         [Display(Name = "Başlık")]
-        public string Title { get; private set; }
+        public string Title { get; private set; } = string.Empty;
         [Display(Name = "Açıklama")]
         public string? Description { get; private set; } = "";
         [Display(Name = "Oda sayısı")]

@@ -17,23 +17,6 @@ namespace RealEstateApp.Controllers
 
         public IActionResult Index()
         {
-            //EmployeeVM vm = new EmployeeVM()
-            //{
-            //    Employees = _context.Employees.ToList()
-            //};
-
-            //HouseVMList vm2 = new HouseVMList()
-            //{
-            //    Houses = _context.Houses.Select(x => new HouseVM()
-            //    {
-            //        Id = x.Id,
-            //        Title = x.Title,
-            //        Price = x.Price,
-            //        NumberOfRooms = x.NumberOfRooms
-
-            //    }).ToList()
-            //};
-
             return View();
         }
 

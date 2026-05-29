@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using RealEstate.Core.Interfaces;
+using RealEstate.Application.AutoMapper;
+using RealEstate.Application.Interfaces;
+using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
 using RealEstate.Infrastructure.Context;
 using RealEstate.Infrastructure.Repository;
+using RealEstate.Infrastructure.Services;
 using RealEstateApp.WebUI;
 using System.Security.Claims;
 
@@ -17,8 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 
 // Program.cs
-
-
 
 builder.Configuration.AddEnvironmentVariables();
 
@@ -78,7 +79,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
-builder.Services.AddAutoMapper(cfg => { }, typeof(RealEstate.Application.Mappings.MappingProfile).Assembly);
+builder.Services.AddScoped<IHouseFilterService, HouseFilterService>();
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
 var app = builder.Build();
 

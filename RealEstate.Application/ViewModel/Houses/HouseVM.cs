@@ -3,7 +3,7 @@ using RealEstate.Core.Models;
 using RealEstate.Core.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace RealEstate.Application.ViewModel
+namespace RealEstate.Application.ViewModel.Houses
 {
     public class HouseVM
     {

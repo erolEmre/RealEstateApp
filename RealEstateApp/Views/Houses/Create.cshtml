@@ -1,4 +1,4 @@
-﻿@model RealEstate.Application.ViewModel.HouseVM;
+﻿@model RealEstate.Application.ViewModel.Houses.HouseVM;
 @using RealEstate.Core.Models.Enums;
 @using System.Security.Claims
 
@@ -110,11 +110,7 @@
      <a asp-controller="Houses" asp-action="Index">Real Estate</a>
     </div>
 
-<div class="flex items-center gap-4">
-<button class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-headline text-sm font-bold tracking-tight active:scale-95 duration-200 ease-in-out">
-                    List Estate
-                </button>
-</div>
+
 </div>
 <div class="bg-slate-800/20 h-[1px] w-full absolute bottom-0"></div>
 </nav>
@@ -254,17 +250,7 @@ placeholder="0555 555 11 11" type="tel"/>
 </div>
 <div class="flex gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
 <div class="flex flex-col gap-2">
-<span class="text-xs font-label uppercase tracking-widest text-slate-500 font-bold">İlana Açılsın Mı?</span>
-<label class="relative inline-flex items-center cursor-pointer mt-2">
-    <input asp-for="IsAvailable" class="sr-only peer" type="checkbox" />
-    
-    <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer 
-                peer-checked:after:translate-x-full peer-checked:after:border-white 
-                after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                after:bg-white after:border-gray-300 after:border after:rounded-full 
-                after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary">
-    </div>
-</label>
+
 <span class="text-xs font-label uppercase tracking-widest text-slate-500 font-bold">Kiralık Mı?</span>
 <label class="relative inline-flex items-center cursor-pointer mt-2">
     <input asp-for="IsRental" class="sr-only peer" type="checkbox" />
@@ -302,96 +288,3 @@ type="submit">
 </div>
 </footer>
 </body></html>
-
-
-@* <h1>İlan Oluştur</h1>
-
-<h4>Ev bilgilerini gir..</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control"  />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumberOfRooms" class="control-label"></label>
-                <select asp-for="NumberOfRooms"
-                        asp-items="Html.GetEnumSelectList<Enum_NumberOfRooms>()"
-                        class="form-control">
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumberOfBathrooms" class="control-label"></label>
-                <input asp-for="NumberOfBathrooms" class="form-control" />
-                <span asp-validation-for="NumberOfBathrooms" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Area" class="control-label"></label>
-                <input asp-for="Area" class="form-control" />
-                <span asp-validation-for="Area" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>                       
-            <div class="form-group">
-                <label asp-for="ContactNumber" class="control-label"></label>
-                <input asp-for="ContactNumber" class="form-control" />
-                <span asp-validation-for="ContactNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="City"></label>
-                <input asp-for="City" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="District"></label>
-                <input asp-for="District" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Street"></label>
-                <input asp-for="Street" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="BuildingNo"></label>
-                <input asp-for="BuildingNo" class="form-control" />
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ApartmentNo"></label>
-                <input asp-for="ApartmentNo" class="form-control" />
-            </div>
-            @* <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
-            </div> 
-            <div class="form-group">
-                <input type="submit" value="Oluştur" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Listeye dön</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} *@
