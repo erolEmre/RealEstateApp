@@ -182,290 +182,323 @@
 					@* Form Başlangıcı *@
 
 					<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="space-y-4" id="filterForm">
-						
+
 						@* Formun içine bu hidden input'u ekle *@
 						<input type="hidden" name="Page" id="pageInput" value="@Model.Page" />
-						
-						<!-- Price Range -->
+
+						<!--IS rental-->
 						<div>
-							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
-							<div class="grid grid-cols-2 gap-2">
-								<input asp-for="minPrice"
-									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
-									   placeholder="Min"
-									   type="number" />
-								<input asp-for="maxPrice"
-									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
-									   placeholder="Max"
-									   type="number" />
+							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">İlan Durumu</span>
+							<div class="grid grid-cols-3 gap-2">
+
+								<!-- TÜMÜ SEÇENEĞİ (Sayfa açılırken otomatik seçili gelir) -->
+								<label class="cursor-pointer select-none">
+									<input type="radio" id="rental_all" name="IsRental" value="2" class="sr-only peer"
+										   onchange="this.form.submit()"
+										   checked="@(Model.IsRental == Enum_IsRental.All || Model.IsRental == null ? "checked" : null)" />
+									<div class="w-full text-center py-2 rounded-lg font-medium text-sm transition-all duration-200
+										bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high
+										peer-checked:bg-primary peer-checked:text-on-primary peer-checked:font-semibold">
+										Tümü
+									</div>
+								</label>
+
+								<!-- SATILIK SEÇENEĞİ -->
+								<label class="cursor-pointer select-none">
+									<input type="radio" id="rental_false" name="IsRental" value="0" class="sr-only peer"
+										   onchange="this.form.submit()"
+										   checked="@(Model.IsRental == Enum_IsRental.Sale ? "checked" : null)" />
+									<div class="w-full text-center py-2 rounded-lg font-medium text-sm transition-all duration-200
+										bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high
+										peer-checked:bg-primary peer-checked:text-on-primary peer-checked:font-semibold">
+										Satılık
+									</div>
+								</label>
+
+								<!-- KİRALIK SEÇENEĞİ -->
+								<label class="cursor-pointer select-none">
+									<input type="radio" id="rental_true" name="IsRental" value="1" class="sr-only peer"
+										   onchange="this.form.submit()"
+										   checked="@(Model.IsRental == Enum_IsRental.Rent ? "checked" : null)" />
+									<div class="w-full text-center py-2 rounded-lg font-medium text-sm transition-all duration-200
+										bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high
+										peer-checked:bg-primary peer-checked:text-on-primary peer-checked:font-semibold">
+										Kiralık
+									</div>
+								</label>
+
 							</div>
 						</div>
-						<!-- City Select -->
-						<div>
-							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Şehir</span>
-							<select asp-for="City"
-									class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
-								@{
-									// List<string> list = new List<string>();
-									<option hidden></option>
-									foreach (var item in Model.AvailableCities)
-									{
-										// var city = item.Address?.City;
-										// if(!String.IsNullOrEmpty(city))
-										// {
-										//  if(!list.Contains(city))
-										//   {
-										//  list.Add(city);
-										//   }
-										// }
-										<option>@item</option>
-									}
-								}
 
-							</select>
-						</div>
-						<!-- Rooms & Bathrooms -->
-						<div class="grid grid-cols-2 gap-4">
-							<div>
-								<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Oda</span>
-								<select asp-for="numberOfRooms"
-										class="w-full bg-surface-container-lowest
-									border-none rounded-lg text-sm focus:ring-1
-									focus:ring-primary text-on-surface">
-
-									<option hidden></option>
-									@foreach (var item in Model.AvailableRooms)
-									{
-										<option value="@item">@Html.DisplayFor(x => item)</option>
-									}
-
-								</select>
-							</div>
-							<div>
-								<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"> Banyo</span>
-								<select asp-for="NumberOfBathrooms"
-										class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
-									<option hidden></option>
-									@foreach (var item in Model.AvailableBathrooms)
-									{
-										<option>@item</option>
-									}
-								</select>
-							</div>
-						</div>
-						<!-- Size -->
-						<div>
-							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Metrekare (m²)</span>
-							<div class="flex items-center gap-2">
-								<input asp-for="minArea"
-									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
-									   placeholder="Min"
-									   type="number" />
-								<span class="text-outline">-</span>
-								<input asp-for="maxArea"
-									   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
-									   placeholder="Max"
-									   type="number" />
-							</div>
-						</div>
-						<button type="submit"
-								class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
-							Sonuçları Uygula
-						</button>
-					</form>
-
-					@if (Model.isFiltered)
-					{
-						<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="mt-4">
-
-							<button type="submit"
-									class="w-full bg-secondary text-on-primary py-4 rounded font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
-								Filtreyi temizle
-							</button>
-						</form>
-					}
-				</div>
-
-			</aside>
-
-
-
-			<!-- Listings Grid -->
-
-			<section class="flex-1">
-				<div id="ilanlar" class="flex justify-between items-end mb-8">
-					<div>
-						<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.TotalCount ilan bulundu</h2>
-					</div>
-					<div class="flex items-center gap-3">
-						<span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
-
-						<form asp-controller="Houses" asp-action="Index" asp-fragment="ilanlar" method="get">
-
-							<select asp-for="sortOrder"
-									form="filterForm"
-									onchange="document.getElementById('filterForm').submit();"
-									class="bg-black border-none font-bold text-primary focus:ring-0 cursor-pointer">
-
-								<option hidden value="">Seçiniz...</option>
-								<option value="date_asc">En Yeni İlanlar</option>
-								<option value="price_asc">Fiyat (Artan)</option>
-								<option value="price_desc">Fiyat (Azalan)</option>
-
-							</select>
-
-						</form>
-					</div>
-				</div>
-				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-					@foreach (var item in Model.Houses)
-					{
-
-						string ListingStatusName = "";
-						if (item.IsRental) ListingStatusName = "Kiralık";
-						else ListingStatusName = "Satılık";
-
-						<a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
-
-							<div class="group bg-surface-container-lowest rounded-3xl
-								overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)]
-								transition-all duration-500"
-								 style="cursor:pointer">
-								<div class="relative aspect-[4/3] overflow-hidden">
-
-									@if (User.IsInRole("Agent"))
-									{
-										filter = "grayscale(100%)";
-
-										@if (item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
-										{
-											filter = "";
+								<!-- Price Range -->
+								<div>
+									<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">Fiyat Aralığı (TL)</span>
+									<div class="grid grid-cols-2 gap-2">
+										<input asp-for="minPrice"
+											   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+											   placeholder="Min"
+											   type="number" />
+										<input asp-for="maxPrice"
+											   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+											   placeholder="Max"
+											   type="number" />
+									</div>
+								</div>
+								<!-- City Select -->
+								<div>
+									<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Şehir</span>
+									<select asp-for="City"
+											class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary py-3 text-on-surface">
+										@{
+											<option hidden></option>
+											foreach (var item in Model.AvailableCities)
+											{
+												<option>@item</option>
+											}
 										}
-									}
-									<img alt="@item.Description"
-										 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-										 src="@(item.ImageUrl ?? "https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg")" style="filter:@filter" />
+
+									</select>
+								</div>
+								<!-- Rooms & Bathrooms -->
+								<div class="grid grid-cols-2 gap-4">
+									<div>
+										<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Oda</span>
+										<select asp-for="numberOfRooms"
+												class="w-full bg-surface-container-lowest
+											border-none rounded-lg text-sm focus:ring-1
+											focus:ring-primary text-on-surface">
+
+											<option hidden></option>
+											@foreach (var item in Model.AvailableRooms)
+											{
+												<option value="@item">@Html.DisplayFor(x => item)</option>
+											}
+
+										</select>
+									</div>
+									<div>
+										<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"> Banyo</span>
+										<select asp-for="NumberOfBathrooms"
+												class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface">
+											<option hidden></option>
+											@foreach (var item in Model.AvailableBathrooms)
+											{
+												<option>@item</option>
+											}
+										</select>
+									</div>
+								</div>
+								<!-- Size -->
+								<div>
+									<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Metrekare (m²)</span>
+									<div class="flex items-center gap-2">
+										<input asp-for="minArea"
+											   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+											   placeholder="Min"
+											   type="number" />
+										<span class="text-outline">-</span>
+										<input asp-for="maxArea"
+											   class="w-full bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary text-on-surface"
+											   placeholder="Max"
+											   type="number" />
+									</div>
+								</div>
+								<button type="submit"
+										class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+									Sonuçları Uygula
+								</button>
+							</form>
+
+							@if (Model.isFiltered)
+							{
+								<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="mt-4">
+
+									<button type="submit"
+											class="w-full bg-secondary text-on-primary py-4 rounded font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
+										Filtreyi temizle
+									</button>
+								</form>
+							}
+						</div>
+
+					</aside>
+
+
+
+					<!-- Listings Grid -->
+
+					<section class="flex-1">
+						<div id="ilanlar" class="flex justify-between items-end mb-8">
+							<div>
+								<h2 class="text-3xl font-extrabold text-primary tracking-tight">Toplam @Model.TotalCount ilan bulundu</h2>
+							</div>
+							<div class="flex items-center gap-3">
+								<span class="text-sm font-medium text-on-surface-variant">Sırala:</span>
+
+								<form asp-controller="Houses" asp-action="Index" asp-fragment="ilanlar" method="get">
+
+									<select asp-for="sortOrder"
+											form="filterForm"
+											onchange="document.getElementById('filterForm').submit();"
+											class="bg-black border-none font-bold text-primary focus:ring-0 cursor-pointer">
+
+										<option hidden value="">Seçiniz...</option>
+										<option value="date_asc">En Yeni İlanlar</option>
+										<option value="price_asc">Fiyat (Artan)</option>
+										<option value="price_desc">Fiyat (Azalan)</option>
+
+									</select>
+
+								</form>
+							</div>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+							@foreach (var item in Model.Houses)
+							{
+
+								var enum_isRental = @Html.DisplayFor(modelItem => item.IsRental);
+
+								<a asp-controller="Houses" asp-action="Details" asp-route-id="@item.Id">
+
+									<div class="group bg-surface-container-lowest rounded-3xl
+										overflow-hidden hover:shadow-[0px_20px_48px_rgba(0,0,0,0.4)]
+										transition-all duration-500"
+										 style="cursor:pointer">
+										<div class="relative aspect-[4/3] overflow-hidden">
+
+											@if (User.IsInRole("Agent"))
+											{
+												filter = "grayscale(100%)";
+
+												@if (item.Employee.Auth0Sub == User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
+												{
+													filter = "";
+												}
+											}
+											<img alt="@item.Description"
+												 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+												 src="@(item.ImageUrl ?? "https://cdn.villacim.com.tr/uploads/1200/villa-arkadya-91_119.jpg")" style="filter:@filter" />
 
                 
-									@if (item.IsAvailable)
-									{
-										string color = "secondary-container";
-										if (item.IsRental) color = "black";
-
-										<span class="absolute top-4 left-4 bg-@color
-											text-white px-4 py-1.5 rounded-full
-											text-xs font-bold uppercase tracking-widest">
-											@ListingStatusName
-										</span>
-									}
-								</div>
-
-								<div class="p-6">
-									<div class="flex justify-between items-start mb-2">
-										<h2 class="text-xl font-bold text-primary leading-tight line-clamp-1">@item.Title</h2>
-
-									</div>
-									<div class="flex justify-between items-start mb-2">
-										<h5 class="text font-bold text-primary leading-tight line-clamp-1">
-											@{
-												string myText = "";
-
-												if (@item.Description.Length >= 12)
-													myText = item.Description.Substring(0, 10) + "...";
-												else
-													myText = item.Description;
+											@if (item.IsAvailable)
+											{
+												string color = "secondary-container";
+												if (item.IsRental == Enum_IsRental.Sale)
+													color = "black";
+												<span class="absolute top-4 left-4 bg-@color
+													text-white px-4 py-1.5 rounded-full
+													text-xs font-bold uppercase tracking-widest">
+													@enum_isRental
+												</span>
 											}
-											@myText
-
-										</h5>
-										<span class="text-xl font-extrabold text-primary">
-											@item.Price.ToString("N0") ₺
-										</span>
-									</div>
-
-									<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
-										<span class="material-symbols-outlined text-[18px]">location_on</span>
-										@item.Address?.City, @item.Address?.District
-									</div>
-
-									<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
-										<div class="flex items-center gap-2">
-
-											<span class="material-symbols-outlined text-outline">bed</span>
-											<span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
 										</div>
-										<div class="flex items-center gap-2">
-											<span class="material-symbols-outlined text-outline">bathtub</span>
-											<span class="text-sm font-bold text-on-surface">@item.NumberOfBathrooms</span>
-										</div>
-										<div class="flex items-center gap-2">
-											<span class="material-symbols-outlined text-outline">square_foot</span>
-											<span class="text-sm font-bold text-on-surface">@item.Area m²</span>
+
+										<div class="p-6">
+											<div class="flex justify-between items-start mb-2">
+												<h2 class="text-xl font-bold text-primary leading-tight line-clamp-1">@item.Title</h2>
+
+											</div>
+											<div class="flex justify-between items-start mb-2">
+												<h5 class="text font-bold text-primary leading-tight line-clamp-1">
+													@{
+														string myText = "";
+
+														if (@item.Description.Length >= 12)
+															myText = item.Description.Substring(0, 10) + "...";
+														else
+															myText = item.Description;
+													}
+													@myText
+
+												</h5>
+												<span class="text-xl font-extrabold text-primary">
+													@item.Price.ToString("N0") ₺
+												</span>
+											</div>
+
+											<div class="flex items-center gap-1 text-on-surface-variant text-sm mb-6">
+												<span class="material-symbols-outlined text-[18px]">location_on</span>
+												@item.Address?.City, @item.Address?.District
+											</div>
+
+											<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+												<div class="flex items-center gap-2">
+
+													<span class="material-symbols-outlined text-outline">bed</span>
+													<span class="text-sm font-bold text-on-surface">@Html.DisplayFor(modelItem => item.NumberOfRooms)</span>
+												</div>
+												<div class="flex items-center gap-2">
+													<span class="material-symbols-outlined text-outline">bathtub</span>
+													<span class="text-sm font-bold text-on-surface">@item.NumberOfBathrooms</span>
+												</div>
+												<div class="flex items-center gap-2">
+													<span class="material-symbols-outlined text-outline">square_foot</span>
+													<span class="text-sm font-bold text-on-surface">@item.Area m²</span>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-						</a>
-					}
+								</a>
+							}
+						</div>
+
+
+
+						<!-- Pagination -->
+						@* Pagination kısmı formun dışında olabilir *@
+						<div class="mt-16 flex justify-center items-center gap-4">
+
+							@* Sol ok *@
+							@if (Model.Page > 0)
+							{
+								<button type="button" onclick="goToPage(@(Model.Page - 1))"
+										class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+									<span class="material-symbols-outlined">chevron_left</span>
+								</button>
+							}
+
+							@* Sayfa butonları *@
+							@for (int i = 0; i < Model.TotalPages; i++)
+							{
+								<button type="button" onclick="goToPage(@i)"
+										class="w-12 h-12 rounded-xl font-bold @(Model.Page == i ? "bg-primary text-on-primary" : "bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high transition-colors")">
+									@(i + 1)
+								</button>
+							}
+
+							@* Sağ ok *@
+							@if (Model.Page < Model.TotalPages - 1)
+							{
+								<button type="button" onclick="goToPage(@(Model.Page + 1))"
+										class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
+									<span class="material-symbols-outlined">chevron_right</span>
+								</button>
+							}
+
+						</div>
+
+						<script>
+							function goToPage(pageNumber) {
+							document.getElementById('pageInput').value = pageNumber;
+							document.getElementById('filterForm').submit();
+							}
+						</script>
+					</section>
 				</div>
-
-
-
-				<!-- Pagination -->
-				@* Pagination kısmı formun dışında olabilir *@
-				<div class="mt-16 flex justify-center items-center gap-4">
-					
-					@* Sol ok *@
-					@if (Model.Page > 0)
-					{
-						<button type="button" onclick="goToPage(@(Model.Page - 1))"
-								class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
-							<span class="material-symbols-outlined">chevron_left</span>
-						</button>
-					}
-
-					@* Sayfa butonları *@
-					@for (int i = 0; i < Model.TotalPages; i++)
-					{
-						<button type="button" onclick="goToPage(@i)"
-								class="w-12 h-12 rounded-xl font-bold @(Model.Page == i ? "bg-primary text-on-primary" : "bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high transition-colors")">
-							@(i + 1)
-						</button>
-					}
-
-					@* Sağ ok *@
-					@if (Model.Page < Model.TotalPages - 1)
-					{
-						<button type="button" onclick="goToPage(@(Model.Page + 1))"
-								class="w-12 h-12 rounded-xl border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-surface-container-high transition-colors">
-							<span class="material-symbols-outlined">chevron_right</span>
-						</button>
-					}
-
+			</main>
+			<!-- Footer -->
+			<footer class="w-full py-12 px-8 bg-surface-container border-t border-outline-variant/15">
+				<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1920px] mx-auto">
+					<div class="text-xl font-bold text-primary">The Curated Estate</div>
+					<div class="flex flex-wrap justify-center gap-8 font-['Inter'] text-sm uppercase tracking-widest">
+					</div>
+					<div class="text-on-surface-variant text-xs opacity-70">
+						© 2024 The Curated Estate. High-End Editorial Real Estate.
+					</div>
 				</div>
-
-				<script>
-					function goToPage(pageNumber) {
-					document.getElementById('pageInput').value = pageNumber;
-					document.getElementById('filterForm').submit();
-					}
-				</script>
-			</section>
-		</div>
-	</main>
-	<!-- Footer -->
-	<footer class="w-full py-12 px-8 bg-surface-container border-t border-outline-variant/15">
-		<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1920px] mx-auto">
-			<div class="text-xl font-bold text-primary">The Curated Estate</div>
-			<div class="flex flex-wrap justify-center gap-8 font-['Inter'] text-sm uppercase tracking-widest">
-			</div>
-			<div class="text-on-surface-variant text-xs opacity-70">
-				© 2024 The Curated Estate. High-End Editorial Real Estate.
-			</div>
-		</div>
-	</footer>
-</body>
-</html>
+			</footer>
+		</body>
+	</html>
 
 
 

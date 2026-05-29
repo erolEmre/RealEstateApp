@@ -15,12 +15,10 @@ namespace RealEstate.Core.Interfaces.Houses.HouseRepository
         public Task<List<RealEstate.Core.Models.House>> GetAllAsync();
         public Task AddAsync(RealEstate.Core.Models.House house);
         public Task UpdateAsync(RealEstate.Core.Models.House house);
-        public void Remove(RealEstate.Core.Models.House house);
-        public void SaveChanges();
+        public Task Remove(RealEstate.Core.Models.House house);
+        public Task SaveChangesAsync();
         
         public IQueryable<RealEstate.Core.Models.House> GetAllWitAsQuery();
-        Task<List<string>> GetAvailableCitiesAsync();
-        Task<List<Enum_NumberOfRooms>> GetAvailableRoomCountsAsync();
-        public Task<List<int>> GetAvailableBathroomCountAsync();
+        
     }
 }

@@ -124,9 +124,8 @@
 					<div class="space-y-4 max-w-3xl">
 						<div class="flex Models-center gap-3">
 							@{
-								string rentalStatus = "";
-								if (@Model.IsRental) rentalStatus = "Kiralık";
-								else rentalStatus = "Satılık";
+									var rentalStatus = @Html.DisplayFor(x => x.IsRental);
+									
 								<span class="bg-green-500 text-black-400 px-4 py-2
 								rounded-full text-xs font-bold tracking-widest uppercase
 								border border-black-400/30">@rentalStatus</span>

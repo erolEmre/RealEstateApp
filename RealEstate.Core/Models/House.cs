@@ -27,7 +27,6 @@ namespace RealEstate.Core.Models
             ChangeArea(area);
             ChangePrice(price);
             IsAvailable = true;
-            IsRental = true;
         }
        
         private void EnsureOwner(int currentEmployeeId)
@@ -60,8 +59,8 @@ namespace RealEstate.Core.Models
         [Display(Name = "Metrekare")]
         public double Area { get; private set; }
         [Display(Name="Kiralık")]
-        public bool IsRental { get; private set; }
-
+ 
+        public Enum_IsRental IsRental { get; private set; }
         public void ChangeArea(double area)
         {
             if (area <= 0)
@@ -69,7 +68,7 @@ namespace RealEstate.Core.Models
 
             Area = area;
         }
-        public void ListingStatus(bool isRental)
+        public void ListingStatus(Enum_IsRental isRental)
         {
             IsRental = isRental;
         }

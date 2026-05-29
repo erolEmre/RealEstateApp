@@ -31,7 +31,7 @@ namespace RealEstate.Infrastructure.Repository
             {
                 h.UpdateDetails(house.Title,house.Price,house.EmployeeId);
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         public async Task<List<House>> GetAllAsync()
         {
@@ -43,19 +43,19 @@ namespace RealEstate.Infrastructure.Repository
            return await _context.Houses.FirstOrDefaultAsync(x=> x.Id == id);
         }
 
-        public async void Remove(House house)
+        public async Task Remove(House house)
         {
            var h = await GetByIdAsync(house.Id);
             if (h != null)
             {
-                h.MarkAsUnavailable();
+                _context.Houses.Remove(h);
             }
             await _context.SaveChangesAsync();
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-             _context.SaveChanges();
+             await _context.SaveChangesAsync();
         }
         
         public IQueryable<House> GetAllWitAsQuery()
@@ -66,31 +66,6 @@ namespace RealEstate.Infrastructure.Repository
               .AsQueryable();
         }
 
-        public async Task<List<string>> GetAvailableCitiesAsync()
-        {
-            return await _context.Houses.Where(x => x.Address.City != null)
-                .Select(x => x.Address.City)
-                .Distinct()
-                .ToListAsync();
-        }
-
-        public async Task<List<Enum_NumberOfRooms>> GetAvailableRoomCountsAsync()
-        {
-             return await _context.Houses.Where(x => x.NumberOfRooms != null
-                  && x.NumberOfRooms >= 0)
-                 .Select(x => x.NumberOfRooms)
-                 .Distinct()
-                 .ToListAsync();
-    
-        }
-
-        public async Task<List<int>> GetAvailableBathroomCountAsync()
-        {
-            return await _context.Houses.Where(x => x.NumberOfBathrooms != null
-                  && x.NumberOfBathrooms >= 0)
-                 .Select(x => x.NumberOfBathrooms)
-                 .Distinct()
-                 .ToListAsync();
-        }
+        
     }
 }

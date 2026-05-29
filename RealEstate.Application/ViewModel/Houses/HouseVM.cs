@@ -30,7 +30,7 @@ namespace RealEstate.Application.ViewModel.Houses
         [Display(Name = "Uygunluk")]
         public bool IsAvailable { get; set; }
         //public Address Address { get; set; } = default!;
-        public bool IsRental { get; set; }
+        public Enum_IsRental IsRental { get; set; }
 
        
         public int EmployeeId { get; set; }

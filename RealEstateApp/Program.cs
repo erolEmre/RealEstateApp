@@ -109,6 +109,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<RealEstateContext>();
+        context.Database.EnsureCreated();
         context.Database.Migrate(); // Bu satır eksik tabloları SQL'e basar
         Console.WriteLine("Veritabanı başarıyla güncellendi!");
     }
@@ -117,4 +118,5 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Migration sırasında hata oluştu: " + ex.Message);
     }
 }
+
 app.Run();

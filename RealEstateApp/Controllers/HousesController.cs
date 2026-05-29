@@ -42,11 +42,24 @@ namespace RealEstateApp.WebUI.Controllers
 
             var query = _houseRepository.GetAllWitAsQuery();
 
-            searchModel.Houses = _houseFilterService.Apply(query, searchModel).ToList();
-            searchModel.AvailableCities = await _houseRepository.GetAvailableCitiesAsync();
-            searchModel.AvailableRooms = await _houseRepository.GetAvailableRoomCountsAsync();
-            searchModel.AvailableBathrooms = await _houseRepository.GetAvailableBathroomCountAsync();
+            IQueryable<House> filteredQuery = _houseFilterService.Apply(query, searchModel);
             
+            searchModel.AvailableCities = await filteredQuery
+                .Select(x => x.Address.City)
+                .Distinct()
+                .ToListAsync();
+            searchModel.AvailableBathrooms = await filteredQuery
+                .Select(x => x.NumberOfBathrooms)
+                .Distinct()
+                .ToListAsync();
+            searchModel.AvailableRooms = await filteredQuery
+                .Select(x => x.NumberOfRooms)
+                .Distinct()
+                .ToListAsync();
+                
+
+            searchModel.Houses = await filteredQuery.ToListAsync();
+
             return View(searchModel);
         }
         [AllowAnonymous]
@@ -63,7 +76,7 @@ namespace RealEstateApp.WebUI.Controllers
             {
                 return NotFound();
             }
-            
+
             var houseVM = _mapper.Map<HouseVM>(house);
             return View(houseVM);
         }
@@ -77,12 +90,12 @@ namespace RealEstateApp.WebUI.Controllers
             }, "Auth0");
         }
 
-     
+
         [Authorize(Roles = "Agent")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-          
+
             var auth0Sub = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             var Houses = await _houseRepository
@@ -97,7 +110,7 @@ namespace RealEstateApp.WebUI.Controllers
                 EmployeeEmail = Houses.Employee.Email,
                 EmployeeFirstName = Houses.Employee.FirstName,
                 EmployeeLastName = Houses.Employee.LastName,
-                 
+
             };
             return View(model);
         }
@@ -138,7 +151,7 @@ namespace RealEstateApp.WebUI.Controllers
                 await _houseRepository.AddAsync(house);
                 return RedirectToAction(nameof(Index));
             }
-          
+
             return View(house);
         }
 
@@ -148,7 +161,7 @@ namespace RealEstateApp.WebUI.Controllers
         {
             var house = await _houseRepository.GetAllWitAsQuery()
                         .FirstOrDefaultAsync(x => x.Id == id);
-           
+
 
             if (house == null) return NotFound();
 
@@ -158,16 +171,16 @@ namespace RealEstateApp.WebUI.Controllers
             return View(houseVM);
         }
 
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(HouseVM vm)
         {
-          
+
             if (ModelState.IsValid)
             {
-                                
+
                 var existingHouse = await _houseRepository.GetByIdAsync(vm.Id);
 
                 existingHouse.UpdateDetails(vm.Title, vm.Price, vm.EmployeeId);
@@ -186,13 +199,14 @@ namespace RealEstateApp.WebUI.Controllers
                 existingHouse.SetImageUrl(vm.ImageUrl);
                 existingHouse.ListingStatus(vm.IsRental);
 
-               _houseRepository.SaveChanges();
+                await _houseRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(vm);
         }
 
         [Authorize(Roles = "Agent")]
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -219,12 +233,12 @@ namespace RealEstateApp.WebUI.Controllers
             var house = await _houseRepository.GetByIdAsync(id);
             if (house != null)
             {
-                _houseRepository.Remove(house);
+                await _houseRepository.Remove(house);
             }
 
-            _houseRepository.SaveChanges();
+            await _houseRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-       
+
     }
 }

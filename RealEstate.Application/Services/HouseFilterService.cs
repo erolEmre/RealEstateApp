@@ -3,6 +3,7 @@ using RealEstate.Application.ViewModel.Houses;
 using RealEstate.Core.Interfaces;
 using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
+using RealEstate.Core.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,8 @@ namespace RealEstate.Infrastructure.Services
 
         public IQueryable<House> Apply(IQueryable<House> query, HouseVMSort houseFilter)
         {
-
+            
             query = _houseRepository.GetAllWitAsQuery();
-            // Raw saf sayfa sayısı
             
             if (!string.IsNullOrEmpty(houseFilter.SearchText))
             {
@@ -41,9 +41,9 @@ namespace RealEstate.Infrastructure.Services
             if (houseFilter.minArea.HasValue) query = query.Where(x => x.Area >= houseFilter.minArea);
             if (houseFilter.maxArea.HasValue) query = query.Where(x => x.Area <= houseFilter.maxArea);
             if (!string.IsNullOrEmpty(houseFilter.City)) query = query.Where(x => x.Address.City == houseFilter.City);
+            if (houseFilter.IsRental != Enum_IsRental.All) query = query.Where(x => x.IsRental == houseFilter.IsRental);
             if (houseFilter.numberOfRooms.HasValue) query = query.Where(x => x.NumberOfRooms == houseFilter.numberOfRooms);
             if (houseFilter.NumberOfBathrooms.HasValue) query = query.Where(x => x.NumberOfBathrooms == houseFilter.NumberOfBathrooms);
-                     
             query = houseFilter.sortOrder switch
             {
                 "date_asc" => query.OrderBy(x => x.ListingDate),
