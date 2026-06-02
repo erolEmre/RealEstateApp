@@ -33,7 +33,7 @@ namespace RealEstate.Application.ViewModel.Houses
         public int Count { get; set; } = 6;
         public int TotalPages { get; set; }
         public int TotalCount { get; set; }
-        public Enum_IsRental IsRental { get; set; }
+        public Enum_IsRental IsRental { get; set; } = Enum_IsRental.All;
     }
 
 }

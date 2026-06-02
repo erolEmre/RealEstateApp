@@ -252,35 +252,35 @@
 									   placeholder="0555 555 11 11" type="tel" />
 							</div>
 						</div>
-					<div class="space-y-4">
-					<label class="block text-xs font-label uppercase tracking-widest text-slate-500 font-bold mb-3">İlan Tipi</label>
-					<div class="grid grid-cols-2 gap-4">
-						<label class="relative flex items-center justify-center p-4 bg-surface-container-highest/20 rounded-2xl border border-outline-variant/20 cursor-pointer group hover:border-primary/50 transition-all">
-							<input checked="" class="sr-only peer" name="IsRental" value="Sale" type="radio" />
-							<div class="absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary transition-all"></div>
-							<div class="flex items-center gap-3 z-10">
-								<span class="material-symbols-outlined text-blue-400 peer-checked:text-white">sell</span>
-								<span class="font-headline font-bold text-white">Satılık</span>
-							</div>
-						</label>
-						<label class="relative flex items-center justify-center p-4 bg-surface-container-highest/20 rounded-2xl border border-outline-variant/20 cursor-pointer group hover:border-primary/50 transition-all">
-									<input class="sr-only peer" type="radio" name="IsRental" value="Rent" />
-							<div class="absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary transition-all"></div>
-							<div class="flex items-center gap-3 z-10">
-								<span class="material-symbols-outlined text-blue-400 peer-checked:text-white">key</span>
-								<span class="font-headline font-bold text-white">Kiralık</span>
-							</div>
-						</label>
 					</div>
-				</div>
-							
-<div class="pt-8 pb-12">
+					<div class="w-full space-y-4">
+						<label class="block text-xs font-label uppercase tracking-widest text-slate-500 font-bold mb-2">İlan Tipi</label>
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+							<label class="relative flex items-center justify-center p-6 bg-surface-container-highest/20 rounded-2xl border border-outline-variant/20 cursor-pointer group hover:bg-surface-container-highest/30 transition-all">
+								<input checked="" class="sr-only peer" name="IsRental" value="Sale" type="radio" />
+								<div class="absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 transition-all"></div>
+								<div class="flex flex-col items-center gap-2 z-10 transition-transform peer-checked:scale-105">
+									<span class="material-symbols-outlined text-blue-400 text-3xl peer-checked:text-white transition-colors">sell</span>
+									<span class="font-headline font-bold text-lg text-white">Satılık</span>
+								</div>
+							</label>
+							<label class="relative flex items-center justify-center p-6 bg-surface-container-highest/20 rounded-2xl border border-outline-variant/20 cursor-pointer group hover:bg-surface-container-highest/30 transition-all">
+								<input checked="" class="sr-only peer" name="IsRental" value="Rent" type="radio" />
+								<div class="absolute inset-0 rounded-2xl border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 transition-all"></div>
+								<div class="flex flex-col items-center gap-2 z-10 transition-transform peer-checked:scale-105">
+									<span class="material-symbols-outlined text-blue-400 text-3xl peer-checked:text-white transition-colors">key</span>
+									<span class="font-headline font-bold text-lg text-white">Kiralık</span>
+								</div>
+							</label>
+						</div>
+					</div>
+					<div class="pt-8 pb-12">
 
-<button class="w-full bg-secondary text-white font-headline text-lg font-bold py-5 rounded-2xl shadow-xl shadow-secondary/20 hover:bg-secondary-container active:scale-[0.98] transition-all flex items-center justify-center gap-3" 
-type="submit">
-<span class="material-symbols-outlined">publish</span>
-                            Yayınla
-                        </button>
+						<button class="w-full bg-secondary text-white font-headline text-lg font-bold py-5 rounded-2xl shadow-xl shadow-secondary/20 hover:bg-secondary-container active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+								type="submit">
+							<span class="material-symbols-outlined">publish</span>
+							Yayınla
+						</button>
 					</div>
 				</form>
 			</div>

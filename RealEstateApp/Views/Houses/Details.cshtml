@@ -274,18 +274,19 @@
 									<span class="material-symbols-outlined">arrow_back</span>
 									<a asp-controller="Houses" asp-action="Index" class="btn btn-outline-light px-4">Listeye Dön</a>
 								</button>
-
-								<button type="button"
+								<form asp-controller="Houses" asp-action="Delete"
+									  asp-route-id="@Model.Id" onclick="return confirm('Bu evi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.');"
+									  class="text-white no-underline w-full h-full block text-center">									
+								<button type="submit"
 										class="w-full py-4 px-6 bg-red-600 text-white rounded-full font-bold text-lg
 									hover:bg-red-700 transition-all flex items-center justify-center active:scale-95">
-									<a asp-controller="Houses"
-									   asp-action="Delete"
-									   asp-route-id="@Model.Id"
-									   onclick="return confirm('Bu evi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.');"
-									   class="text-white no-underline w-full h-full block text-center">
+									
+									@Html.AntiForgeryToken()
+									   
+									   
 										Evi Sil
-									</a>
 								</button>
+									</form>
 							</div>
 						</div>
 						<!-- Quick Tools -->

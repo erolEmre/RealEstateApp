@@ -2,21 +2,12 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.ViewModel.Houses;
 using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
-using RealEstate.Core.Models.Enums;
-using RealEstate.Infrastructure.Context;
-using RealEstate.Infrastructure.Repository;
-using RealEstateApp.WebUI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace RealEstateApp.WebUI.Controllers
 {
@@ -180,7 +171,6 @@ namespace RealEstateApp.WebUI.Controllers
 
             if (ModelState.IsValid)
             {
-
                 var existingHouse = await _houseRepository.GetByIdAsync(vm.Id);
 
                 existingHouse.UpdateDetails(vm.Title, vm.Price, vm.EmployeeId);
@@ -206,7 +196,7 @@ namespace RealEstateApp.WebUI.Controllers
         }
 
         [Authorize(Roles = "Agent")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -221,21 +211,7 @@ namespace RealEstateApp.WebUI.Controllers
             {
                 return NotFound();
             }
-
-            return View(house);
-        }
-
-        // POST: Houses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var house = await _houseRepository.GetByIdAsync(id);
-            if (house != null)
-            {
-                await _houseRepository.Remove(house);
-            }
-
+            await _houseRepository.Remove(house);
             await _houseRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
