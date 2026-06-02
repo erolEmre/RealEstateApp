@@ -86,23 +86,22 @@ namespace RealEstateApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-
+           
             var auth0Sub = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             var Houses = await _houseRepository
                 .GetAllWitAsQuery()
-                .FirstOrDefaultAsync(x => x.Employee.Auth0Sub == auth0Sub);
+                .FirstOrDefaultAsync(x => x.Employee.Auth0Sub == auth0Sub);           
+            
+                var model = new HouseVM
+                {
+                    EmployeeId = Houses.Employee?.Id ?? 0,
+                    EmployeeAuth0Sub = Houses.Employee.Auth0Sub,
+                    EmployeeEmail = Houses.Employee.Email,
+                    EmployeeFirstName = Houses.Employee.FirstName,
+                    EmployeeLastName = Houses.Employee.LastName,
 
-
-            var model = new HouseVM
-            {
-                EmployeeId = Houses.Employee?.Id ?? 0,
-                EmployeeAuth0Sub = Houses.Employee.Auth0Sub,
-                EmployeeEmail = Houses.Employee.Email,
-                EmployeeFirstName = Houses.Employee.FirstName,
-                EmployeeLastName = Houses.Employee.LastName,
-
-            };
+                };
             return View(model);
         }
 
