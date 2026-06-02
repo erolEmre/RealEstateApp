@@ -20,7 +20,7 @@ namespace RealEstate.Application.AutoMapper
             .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
             .ForMember(dest => dest.BuildingNo, opt => opt.MapFrom(src => src.Address.BuildingNo))
             .ForMember(dest => dest.ApartmentNo, opt => opt.MapFrom(src => src.Address.ApartmentNo))
-
+            .ForMember(dest => dest.NumberOfRooms, opt => opt.MapFrom(src => src.NumberOfRooms))
                 // Çalışan (Employee) bilgilerini VM'e ekle
                 .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.Employee.Id))
                 .ForMember(dest => dest.EmployeeAuth0Sub, opt => opt.MapFrom(src => src.Employee.Auth0Sub));
