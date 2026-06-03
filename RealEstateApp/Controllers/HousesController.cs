@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RealEstate.Application.Interfaces;
 using RealEstate.Application.ViewModel.Houses;
+using RealEstate.Core.Interfaces.Employees;
 using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
 using System.Security.Claims;
@@ -17,12 +18,13 @@ namespace RealEstateApp.WebUI.Controllers
         private readonly IHouseRepository _houseRepository;
         private readonly IMapper _mapper;
         readonly IHouseFilterService _houseFilterService;
-
-        public HousesController(IMapper mapper, IHouseRepository houseRepository, IHouseFilterService houseFilterService)
+        readonly IEmployeeRepository _employeeRepository;
+        public HousesController(IMapper mapper, IHouseRepository houseRepository, IHouseFilterService houseFilterService, IEmployeeRepository employeeRepository)
         {
             _houseRepository = houseRepository;
             _mapper = mapper;
             _houseFilterService = houseFilterService;
+            _employeeRepository = employeeRepository;
         }
 
         [AllowAnonymous]
@@ -34,7 +36,7 @@ namespace RealEstateApp.WebUI.Controllers
             var query = _houseRepository.GetAllWitAsQuery();
 
             IQueryable<House> filteredQuery = _houseFilterService.Apply(query, searchModel);
-            
+
             searchModel.AvailableCities = await filteredQuery
                 .Select(x => x.Address.City)
                 .Distinct()
@@ -47,7 +49,7 @@ namespace RealEstateApp.WebUI.Controllers
                 .Select(x => x.NumberOfRooms)
                 .Distinct()
                 .ToListAsync();
-                
+
 
             searchModel.Houses = await filteredQuery.ToListAsync();
 
@@ -86,24 +88,26 @@ namespace RealEstateApp.WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-           
-            var auth0Sub = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            HouseVM model = new();
 
-            var Houses = await _houseRepository
-                .GetAllWitAsQuery()
-                .FirstOrDefaultAsync(x => x.Employee.Auth0Sub == auth0Sub);           
+            var Employee = await _employeeRepository.ReadEmployee();
+            if (Employee == null) return NotFound();
+
             
-                var model = new HouseVM
+           
+                model = new HouseVM
                 {
-                    EmployeeId = Houses.Employee?.Id ?? 0,
-                    EmployeeAuth0Sub = Houses.Employee.Auth0Sub,
-                    EmployeeEmail = Houses.Employee.Email,
-                    EmployeeFirstName = Houses.Employee.FirstName,
-                    EmployeeLastName = Houses.Employee.LastName,
+                    EmployeeId = Employee?.Id ?? 0,
+                    EmployeeAuth0Sub = Employee.Auth0Sub,
+                    EmployeeEmail = Employee.Email,
+                    EmployeeFirstName = Employee.FirstName,
+                    EmployeeLastName = Employee.LastName,
 
                 };
+
             return View(model);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

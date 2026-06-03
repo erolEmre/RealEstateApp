@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RealEstate.Application.AutoMapper;
 using RealEstate.Application.Interfaces;
+using RealEstate.Core.Interfaces.Employees;
 using RealEstate.Core.Interfaces.Houses.HouseRepository;
 using RealEstate.Core.Models;
 using RealEstate.Infrastructure.Context;
@@ -22,6 +23,9 @@ DotNetEnv.Env.Load(Path.Combine(Directory.GetCurrentDirectory(), ".env"));
 // Program.cs
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddHttpContextAccessor(); // User'a gideceğiz
+
 
 builder.Services.AddControllersWithViews();
 
@@ -80,6 +84,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
 builder.Services.AddScoped<IHouseFilterService, HouseFilterService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
 var app = builder.Build();

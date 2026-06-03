@@ -20,3 +20,24 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Custom Sidebar Scrollbar Tasarımı */
+.custom-sidebar-scroll::-webkit-scrollbar {
+    width: 6px; /* Çubuğun kalınlığı (İncecik yaptık) */
+}
+
+/* Scrollbar'ın arkasındaki boş yol */
+.custom-sidebar-scroll::-webkit-scrollbar-track {
+    background: #0f172a; /* bg-slate-900 tonlarında tamamen koyu arka plan */
+    border-radius: 24px;
+}
+
+/* Kullanıcının tutup kaydırdığı buton kısmı */
+.custom-sidebar-scroll::-webkit-scrollbar-thumb {
+    background: #334155; /* bg-slate-700 tonlarında koyu gri tutamaç */
+    border-radius: 24px;
+}
+
+    /* Kullanıcı üzerine geldiğinde (Hover) tutamacın rengi */
+    .custom-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: #475569; /* bg-slate-600 bir tık daha açık gri */
+    }

@@ -99,6 +99,27 @@
 		.dark nav {
 		background-color: rgba(11, 14, 17, 0.8) !important;
 		}
+
+		.custom-sidebar-scroll::-webkit-scrollbar {
+		width: 6px; /* Çubuğun kalınlığı (İncecik yaptık) */
+		}
+
+		/* Scrollbar'ın arkasındaki boş yol */
+		.custom-sidebar-scroll::-webkit-scrollbar-track {
+		background: #0f172a; /* bg-slate-900 tonlarında tamamen koyu arka plan */
+		border-radius: 24px;
+		}
+
+		/* Kullanıcının tutup kaydırdığı buton kısmı */
+		.custom-sidebar-scroll::-webkit-scrollbar-thumb {
+		background: #334155; /* bg-slate-700 tonlarında koyu gri tutamaç */
+		border-radius: 24px;
+		}
+
+		/* Kullanıcı üzerine geldiğinde (Hover) tutamacın rengi */
+		.custom-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+		background: #475569; /* bg-slate-600 bir tık daha açık gri */
+		}
 	</style>
 </head>
 <body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container dark">
@@ -172,26 +193,28 @@
 		<div class="max-w-[1920px] mx-auto px-8 flex flex-col lg:flex-row gap-8 pb-24">
 			<!-- Sidebar Filters -->
 			<aside class="w-full lg:w-80 shrink-0">
-				<div class="bg-surface-container rounded-3xl p-8 sticky top-28">
-					<h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
-						<span class="material-symbols-outlined">tune</span>
-						Filtrele
-					</h2>
+				<div dir="rtl" class="bg-surface-container rounded-3xl p-6 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto custom-sidebar-scroll">
+
+					<div dir="ltr" class="pr-2">
+
+						<h3 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+							<span class="material-symbols-outlined">tune</span>
+							Filtrele
+						</h3>
 
 					<!-- Property Status -->
 					@* Form Başlangıcı *@
 
 					<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="space-y-4" id="filterForm">
 
-						@* Formun içine bu hidden input'u ekle *@
 						<input type="hidden" name="Page" id="pageInput" value="@Model.Page" />
 
 						<!--IS rental-->
+						
 						<div>
 							<span class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">İlan Durumu</span>
 							<div class="grid grid-cols-3 gap-2">
 
-								<!-- TÜMÜ SEÇENEĞİ (Sayfa açılırken otomatik seçili gelir) -->
 								<label class="cursor-pointer select-none">
 									<input type="radio" id="rental_all" name="IsRental" value="2" class="sr-only peer"
 										   onchange="this.form.submit()"
@@ -202,7 +225,7 @@
 										Tümü
 									</div>
 								</label>
-
+						
 								<!-- SATILIK SEÇENEĞİ -->
 								<label class="cursor-pointer select-none">
 									<input type="radio" id="rental_false" name="IsRental" value="0" class="sr-only peer"
@@ -303,12 +326,15 @@
 											   type="number" />
 									</div>
 								</div>
+						<div class="mt-6">
 								<button type="submit"
 										class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-sm shadow-lg hover:opacity-90 transition-opacity">
 									Sonuçları Uygula
 								</button>
+								</div>
 							</form>
-
+					</div>
+					
 							@if (Model.isFiltered)
 							{
 								<form asp-controller="Houses" asp-action="Index" method="get" asp-fragment="ilanlar" class="mt-4">
@@ -319,10 +345,10 @@
 									</button>
 								</form>
 							}
-						</div>
 
+
+				</div>
 					</aside>
-
 
 
 					<!-- Listings Grid -->
