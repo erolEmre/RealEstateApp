@@ -79,3 +79,87 @@ RealEstate
     ├── Views
     └── wwwroot
 ```
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before running the project, make sure the following tools are installed:
+
+* .NET 8 SDK
+* Docker Desktop
+* Git
+
+---
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/erolEmre/RealEstateApp.git
+cd RealEstateApp
+```
+
+---
+
+### Run with Docker
+
+The application and SQL Server database can be started using Docker Compose.
+
+```bash
+docker compose up -d
+```
+
+Verify that the containers are running:
+
+```bash
+docker ps
+```
+
+Stop the containers:
+
+```bash
+docker compose down
+```
+
+---
+
+### Access the Application
+
+After the containers are started, open your browser and navigate to:
+
+```text
+http://localhost:8080
+```
+
+or
+
+```text
+https://localhost:8081
+```
+
+(depending on your Docker configuration)
+
+---
+
+### Demo Account
+
+For testing purposes, you can use the following account:
+
+**Email**
+
+```text
+Email: available in Auth0 demo tenant
+```
+
+**Password**
+
+```text
+Password: available upon request
+```
+
+---
+
+### Authentication
+
+The project uses **Auth0** for authentication and authorization.
+
+Authenticated users are mapped to local Employee records and can manage only the property listings they own.
