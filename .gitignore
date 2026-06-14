@@ -5,3 +5,5 @@ obj/
 *env
 /.env
 /RealEstate.Notes.txt
+/docker-compose.yml
+db-data/

@@ -1,5 +1,5 @@
-﻿    ConnectionStrings__DefaultConnection=
+﻿    ConnectionStrings__DefaultConnection=Server=veritabani;Database=RealEstateApp;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;Encrypt=False;
     DB_PASSWORD=
-    Auth0__Domain=
-    Auth0__ClientId=
+    Auth0__Domain=dev-z4e5ebpff631ncnc.us.auth0.com
+    Auth0__ClientId=eHUIBswxb8t21WV0XPNgicsRWUXAFchy
     Auth0__ClientSecret=
